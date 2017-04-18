@@ -28,7 +28,7 @@ const tone_analyzer = watson.tone_analyzer({
 
 
 // Breakpoints 0 < not likely < 0.5 < likely < 0.75 < very likely
-app.get('/gen/hot', (req, res) => {
+app.get('/api/gen/hot', (req, res) => {
   r.getHot()
     .then(response => {
       const redditData = response.map((post) => {
