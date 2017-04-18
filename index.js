@@ -26,16 +26,31 @@ const tone_analyzer = watson.tone_analyzer({
   version_date: '2016-05-19'
 });
 
+// merges data back together so that it's flatter
+const mergeData = (reddit, watson) => {
+  console.log("in merged data function");
+  console.log(reddit[0]);
+
+  let merged = reddit;
+
+  console.log("checking copying reddit data");
+  console.log(merged);
+  merged.forEach((post, i) => {
+    post["tones"] = watson[i].document_tone;
+  });
+
+  console.log("does this actually merge");
+  console.log(merged);
+  return merged;
+}
+
 
 // Breakpoints 0 < not likely < 0.5 < likely < 0.75 < very likely
 app.get('/api/gen/hot', (req, res) => {
-  r.getHot()
+  r.getHot({amount: 40})
     .then(response => {
       const redditData = response.map((post) => {
-        // Keep this in case you have to regex again
-        // return {title: post.title.replace(/[^\w\s]|_/g, "")
-        //  .replace(/\s+/g, " "), subreddit: post.subreddit_name_prefixed}
-        return {title: post.title, subreddit: post.subreddit_name_prefixed}
+        return {title: post.title, subreddit: post.subreddit_name_prefixed, permalink: post.permalink, score: post.score, over_18: post.over_18}
       });
       
       // hard coded function
@@ -52,20 +67,62 @@ app.get('/api/gen/hot', (req, res) => {
 
       Promise.all(toneMap(redditData))
         .then(results => {
-            const emotionTone = results.map(postres => {
-              return postres.document_tone.tone_categories.find(t => t.category_id === "emotion_tone")});
-            const languageTone = results.map(postres => {
-              return postres.document_tone.tone_categories.find(t => t.category_id === "language_tone")});
-            const socialTone = results.map(postres => {
-              return postres.document_tone.tone_categories.find(t => t.category_id === "social_tone")});
+            // const emotionTone = results.map(postres => {
+            //   return postres.document_tone.tone_categories.find(t => t.category_id === "emotion_tone")});
+            // const languageTone = results.map(postres => {
+            //   return postres.document_tone.tone_categories.find(t => t.category_id === "language_tone")});
+            // const socialTone = results.map(postres => {
+            //   return postres.document_tone.tone_categories.find(t => t.category_id === "social_tone")});
 
-            res.json({emotionTone, languageTone, socialTone, redditData});
+            let data = mergeData(redditData, results);
+            console.log(data);
+
+            res.json({results: data});
         })
         .catch(err => {
           res.json({err:err});
         })
     })
 })
+
+app.get('/api/gen/top', (req, res) => {
+  r.getTop({time: 'day', count: 50})
+  .then(response => {
+      const redditData = response.map((post) => {
+        return {title: post.title, subreddit: post.subreddit_name_prefixed, permalink: post.permalink, score: post.score, over_18: post.over_18}
+      });
+      
+      // hard coded function
+      // MUST PROMISIFY THE TONE ANALYZER 
+      // why isn't this a promise to begin with. UGH.
+      const promiseTone = Promise.promisify(tone_analyzer.tone, {context: tone_analyzer});
+
+      const toneMap = (redditData) => {
+        return redditData.map(post => {
+          return promiseTone({text: post.title})
+            .then(r => r)
+        })
+      }
+
+      Promise.all(toneMap(redditData))
+        .then(results => {
+            // const emotionTone = results.map(postres => {
+            //   return postres.document_tone.tone_categories.find(t => t.category_id === "emotion_tone")});
+            // const languageTone = results.map(postres => {
+            //   return postres.document_tone.tone_categories.find(t => t.category_id === "language_tone")});
+            // const socialTone = results.map(postres => {
+            //   return postres.document_tone.tone_categories.find(t => t.category_id === "social_tone")});
+
+            let data = mergeData(redditData, results);
+            console.log(data);
+
+            res.json({results: data});
+        })
+        .catch(err => {
+          res.json({err:err});
+        })
+    })
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
