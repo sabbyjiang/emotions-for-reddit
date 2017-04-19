@@ -1,5 +1,6 @@
 const snoowrap = require('snoowrap'),
-      dotenv = require('dotenv').config();
+      dotenv = require('dotenv').config(),
+      fetch = require('node-fetch');
 
 const r = new snoowrap({
   userAgent: process.env.USER_AGENT,
@@ -40,4 +41,26 @@ const redditTop = (req, res, next) => {
     })
 }
 
-module.exports = {redditHot, redditTop};
+const getAuth = (req, res, next) => {
+  const code = req.query.code;
+
+  const auth = "Basic " + new Buffer(process.env.REDDIT_CLIENT_ID + ':' + process.env.REDDIT_SECRET).toString('base64');
+
+  fetch(
+    "https://www.reddit.com/api/v1/access_token", 
+    {
+      method: 'POST', 
+      body: 'grant_type=authorization_code&code=' + code + '&redirect_uri=' + process.env.REDIRECT,
+      headers: {
+        "Authorization": auth
+      }
+    })
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {console.log("err", err)});
+
+  
+}
+
+module.exports = {redditHot, redditTop, getAuth};
