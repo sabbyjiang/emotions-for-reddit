@@ -3,7 +3,8 @@ const {getAuth} = require('../../models/reddit-functions');
 const passport = require('passport');
 
 router.get('/', getAuth, (req, res) => {
-  res.json(req.reddit);
+  const reddit = req.reddit;
+  res.json({reddit: reddit});
 });
 
 // router.get('/', (req, res) => {
