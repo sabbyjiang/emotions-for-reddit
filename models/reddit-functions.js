@@ -3,12 +3,18 @@ const snoowrap = require('snoowrap'),
       // fetch = require('node-fetch'),
       axios = require('axios');
 
-const r = new snoowrap({
-  userAgent: process.env.USER_AGENT,
-  clientId: process.env.REDDIT_CLIENT_ID,
-  clientSecret: process.env.REDDIT_SECRET,
-  refreshToken: process.env.REFRESH_TOKEN
-});
+const reddit = (redditObj) => {
+  if(redditObj.clientId){
+
+  }
+  const r = new snoowrap({
+    userAgent: process.env.USER_AGENT,
+    clientId: process.env.REDDIT_CLIENT_ID,
+    clientSecret: process.env.REDDIT_SECRET,
+    refreshToken: process.env.REFRESH_TOKEN
+  });
+  return r;
+}
 
 const numPosts = 50;
 
@@ -58,15 +64,32 @@ const getAuth = (req, res, next) => {
         "Authorization": auth
       }
     })
-    // .then(r => r.json())
     .then(results => {
-      req.reddit = results;
-      console.log(results.data);
+      req.reddit = results.data;
       next();
     })
     .catch(err => {console.log("err", err)});
-
-  
 }
 
-module.exports = {redditHot, redditTop, getAuth};
+const refreshToken = (req, res, next) => {
+  const token = req.cookies.refresh;
+
+  const auth = "Basic " + new Buffer(process.env.REDDIT_CLIENT_ID + ':' + process.env.REDDIT_SECRET).toString('base64');
+
+  axios(
+    "https://www.reddit.com/api/v1/access_token", 
+    {
+      method: 'POST', 
+      data: 'grant_type=refresh_token&refresh_token=' + token,
+      headers: {
+        "Authorization": auth
+      }
+    })
+    .then(results => {
+      req.reddit = results.data;
+      next();
+    })
+    .catch(err => {console.log("err", err)});
+}
+
+module.exports = {redditHot, redditTop, getAuth, refreshToken};
