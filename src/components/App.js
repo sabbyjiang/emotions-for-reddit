@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
+const data = require('../../db/hot/2017-04-19-18-12').results;
 
 class App extends Component {
+  // constructor(){
+  //   super();
+  //   this.state = {
+  //   }
+  // }
   render(){
+    console.log(data);
     return (
       <div className="App">
         <h1> Testing Landing </h1>
