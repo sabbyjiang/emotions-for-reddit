@@ -16,7 +16,9 @@ class Column extends Component {
       y: this.props.y(d),
       height: this.props.height(d),
       width: this.props.width,
-      key: d.data.title + index
+      key: d.data.title + index,
+      title: d.data.title,
+      setCurrPost: this.props.setCurrPost
     }
 
     return (

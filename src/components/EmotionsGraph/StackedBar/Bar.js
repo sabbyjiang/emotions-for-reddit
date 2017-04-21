@@ -8,11 +8,13 @@ import React from 'react';
   //         key = "stacked-bar-" + data.key;
 
 const Bar = (props) => {
+  // console.log(props);
   return (
     <rect x={props.x}
           y={props.y}
           height={props.height}
-          width={props.width}>
+          width={props.width}
+          onMouseEnter={(e) => props.setCurrPost(props.title)}>
     </rect>
   );
 }

@@ -8,33 +8,31 @@ class EmotionsGraph extends Component {
   constructor(){
     super();
     this.state = {
-      rawData: []
+      rawData: data,
+      currentPost: "",
     }
   }
 
-  componentWillMount(){
-    this.setState({rawData: data});
+  setCurrPost(title){
+    this.setState({currentPost: title})
   }
 
-  // loadRawData(){
-  //   d3.json(this.props.url)
-  //     .get(d => {
-  //       // alert(`Total: ${d.length}, Emotional: ${d[0].emotionalTone}, Language: ${d[1].languageTone}, SocialTone: ${d[2].socialTone}`);
-  //       this.setState({rawData: d})
-  //     })
+  // componentWillMount(){
+  //   this.setState({rawData: data});
   // }
 
   render(){
-    const margin = {top: 20, right: 20, bottom: 30, left: 40},
-          width = 960 - margin.left - margin.right,
+    const margin = {top: 20, right: 40, bottom: 30, left: 40},
+          width = 980 - margin.left - margin.right,
           height = 500 - margin.top - margin.bottom;
     const params = {margin, width, height};
-    // console.log(this.state.rawData);
+    
     return (
       <div>
-        <svg width={width} height={height}>
-          <StackedBar {...params} data={this.state.rawData[0].emotionalTone} />
+        <svg width={width} height={height + 100}>
+          <StackedBar {...params} data={this.state.rawData[0].emotionalTone} setCurrPost={this.setCurrPost.bind(this)}/>
         </svg>
+        <p> Current Post: {this.state.currentPost} </p>
       </div>
     );
   }

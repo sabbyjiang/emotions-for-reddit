@@ -63,24 +63,24 @@ class StackedBar extends Component {
           height = (d) => this.yScale(d[0]) - this.yScale(d[1]),
           width = this.xScale.bandwidth(),
           key = "stacked-bar-" + data.key;
-    
     return <Column  x={x.bind(this)}
                     y={y.bind(this)}
                     z={z.bind(this)}
                     height={height.bind(this)}
                     width={width}
                     key={key}
-                    data={data}/>
+                    data={data}
+                    setCurrPost={this.props.setCurrPost}
+                    />
   }
 
   makeXAxis(){
     const props = {
       height: this.props.height,
-      x: this.xScale
     }
 
     return (
-      <XAxis {...props} />
+      <XAxis {...props} width={this.props.width} data={this.props.data}/>
     )
   }
 
@@ -90,7 +90,7 @@ class StackedBar extends Component {
     return (
       <g className="stacked">
         { barStack.map(this.makeColumn.bind(this)) }
-        {this.makeXAxis.bind(this)}
+        {this.makeXAxis()}
       </g>
     );
   }

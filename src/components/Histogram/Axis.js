@@ -13,9 +13,9 @@ class Axis extends Component {
     this.update_d3(props);
   }
 
-  // componentWillReceiveProps(newProps){
-  //   this.update_d3(newProps);
-  // }
+  componentWillReceiveProps(newProps){
+    this.update_d3(newProps);
+  }
 
   update_d3(props){
     this.yScale
