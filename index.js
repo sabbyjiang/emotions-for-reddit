@@ -9,7 +9,11 @@ const express = require('express'),
       dotenv = require('dotenv').config(),
       RedditStrategy = require('passport-reddit').Strategy,
       session = require('express-session'),
+      // webpack = require('webpack'),
+      // config = require('./webpack.config.js'),
       PORT = process.env.PORT || 8080;
+
+// var compiler = webpack(config);
 
 app.use(cors());
 app.use(logger('dev'));
@@ -27,6 +31,13 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
+
+// app.use(require('webpack-dev-middleware')(compiler, {
+//   noInfo: true,
+//   publicPath: config.output.publicPath
+// }));
+
+// app.use(require('webpack-hot-middleware')(compiler));
 
 // app.use(passport.initialize());
 // app.use(passport.session());
