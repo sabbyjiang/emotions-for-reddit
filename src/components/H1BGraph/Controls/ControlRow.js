@@ -29,7 +29,7 @@ class ControlRow extends Component {
     let key = `toggle-${name}`,
         label = name;
     if(this.props.capitalize){
-      label = lable.toUpperCase();
+      label = label.toUpperCase();
     }
     // The toggle button on click calls the make pick function defined above!
 

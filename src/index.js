@@ -18,7 +18,15 @@ String.prototype.decapitalize = function () {
     return this.charAt(0).toLowerCase() + this.slice(1);
 }
 
+// ReactDOM.render(
+//   <H1BGraph url="./data/h1bs.csv"/>, 
+//   document.querySelector('.h1bgraph')
+// )
+
+
+import EmotionsGraph from './components/EmotionsGraph';
+
 ReactDOM.render(
-  <H1BGraph url="./data/h1bs.csv"/>, 
-  document.querySelector('.h1bgraph')
+  <EmotionsGraph url="./data/2017-04-19-18-11"/>, 
+  document.querySelector('.stacked-bar')
 )
