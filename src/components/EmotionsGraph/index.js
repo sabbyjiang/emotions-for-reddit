@@ -24,15 +24,16 @@ class EmotionsGraph extends Component {
   render(){
     const margin = {top: 20, right: 40, bottom: 30, left: 40},
           width = 980 - margin.left - margin.right,
-          height = 500 - margin.top - margin.bottom;
-    const params = {margin, width, height};
+          height = 500 - margin.top - margin.bottom,
+          colours = ['#b3e2cd','#fdcdac','#cbd5e8','#f4cae4','#e6f5c9'];
+    const params = {margin, width, height, colours};
     
     return (
       <div>
-        <svg width={width} height={height + 100}>
+        <svg width={width + 50} height={height + 150}>
           <StackedBar {...params} data={this.state.rawData[0].emotionalTone} setCurrPost={this.setCurrPost.bind(this)}/>
         </svg>
-        <p> Current Post: {this.state.currentPost} </p>
+        <p> Title: {this.state.currentPost} </p>
       </div>
     );
   }

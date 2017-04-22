@@ -8,13 +8,16 @@ import React from 'react';
   //         key = "stacked-bar-" + data.key;
 
 const Bar = (props) => {
-  // console.log(props);
+  const handleClick = (url) => {
+    window.open(url, '_blank');
+  }
   return (
     <rect x={props.x}
           y={props.y}
           height={props.height}
           width={props.width}
-          onMouseEnter={(e) => props.setCurrPost(props.title)}>
+          onMouseEnter={(e) => props.setCurrPost(props.title)}
+          onClick={() => handleClick("http://www.reddit.com" + props.data.permalink) }>
     </rect>
   );
 }

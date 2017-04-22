@@ -56943,21 +56943,22 @@ var EmotionsGraph = function (_Component) {
     value: function render() {
       var margin = { top: 20, right: 40, bottom: 30, left: 40 },
           width = 980 - margin.left - margin.right,
-          height = 500 - margin.top - margin.bottom;
-      var params = { margin: margin, width: width, height: height };
+          height = 500 - margin.top - margin.bottom,
+          colours = ['#b3e2cd', '#fdcdac', '#cbd5e8', '#f4cae4', '#e6f5c9'];
+      var params = { margin: margin, width: width, height: height, colours: colours };
 
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
           'svg',
-          { width: width, height: height + 100 },
+          { width: width + 50, height: height + 150 },
           _react2.default.createElement(_StackedBar2.default, _extends({}, params, { data: this.state.rawData[0].emotionalTone, setCurrPost: this.setCurrPost.bind(this) }))
         ),
         _react2.default.createElement(
           'p',
           null,
-          ' Current Post: ',
+          ' Title: ',
           this.state.currentPost,
           ' '
         )
@@ -57024,6 +57025,14 @@ var _XAxis = __webpack_require__(237);
 
 var _XAxis2 = _interopRequireDefault(_XAxis);
 
+var _YAxis = __webpack_require__(238);
+
+var _YAxis2 = _interopRequireDefault(_YAxis);
+
+var _Legend = __webpack_require__(239);
+
+var _Legend2 = _interopRequireDefault(_Legend);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -57044,11 +57053,16 @@ var StackedBar = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (StackedBar.__proto__ || Object.getPrototypeOf(StackedBar)).call(this));
 
+    _this.state = {
+      data: props.data
+    };
+
     _this.xScale = d3.scaleBand();
     _this.yScale = d3.scaleLinear();
     // This is taken from colour brewer
-    _this.zScale = d3.scaleOrdinal().range(['#b3e2cd', '#fdcdac', '#cbd5e8', '#f4cae4', '#e6f5c9']);
+    _this.zScale = d3.scaleOrdinal().range(props.colours);
     _this.keys = [];
+    _this.barStack = null;
     _this.update_d3(props);
     return _this;
   }
@@ -57076,9 +57090,11 @@ var StackedBar = function (_Component) {
         return b.total - a.total;
       });
 
-      data[0].tones.forEach(function (tone) {
-        _this2.keys.push(tone.tone_id);
-      });
+      if (this.keys == false) {
+        data[0].tones.forEach(function (tone) {
+          _this2.keys.push(tone.tone_id);
+        });
+      }
 
       this.xScale.rangeRound([0, props.width]).paddingInner(0.05).align(0.1).domain(data.map(function (d) {
         return d.title;
@@ -57089,10 +57105,12 @@ var StackedBar = function (_Component) {
       })]).nice();
 
       this.zScale.domain(this.keys);
+      // this ternary has to be here because about stack restacks into the old value on update... super weird
+      this.barStack = this.barStack ? this.barStack : d3.stack().keys(this.keys)(props.data);
     }
   }, {
     key: 'makeColumn',
-    value: function makeColumn(data) {
+    value: function makeColumn(data, i) {
       var _this3 = this;
 
       var x = function x(d) {
@@ -57108,7 +57126,7 @@ var StackedBar = function (_Component) {
         return _this3.yScale(d[0]) - _this3.yScale(d[1]);
       },
           width = this.xScale.bandwidth(),
-          key = "stacked-bar-" + data.key;
+          key = "stacked-bar-" + data.key + "-" + i;
       return _react2.default.createElement(_Column2.default, { x: x.bind(this),
         y: y.bind(this),
         z: z.bind(this),
@@ -57129,14 +57147,25 @@ var StackedBar = function (_Component) {
       return _react2.default.createElement(_XAxis2.default, _extends({}, props, { width: this.props.width, data: this.props.data }));
     }
   }, {
+    key: 'makeYAxis',
+    value: function makeYAxis() {
+      return _react2.default.createElement(_YAxis2.default, this.props);
+    }
+  }, {
+    key: 'makeLegend',
+    value: function makeLegend() {
+      return _react2.default.createElement(_Legend2.default, _extends({ keys: this.keys }, this.props));
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var barStack = d3.stack().keys(this.keys)(this.props.data);
       return _react2.default.createElement(
         'g',
-        { className: 'stacked' },
-        barStack.map(this.makeColumn.bind(this)),
-        this.makeXAxis()
+        { className: 'stacked', transform: 'translate(50,50)' },
+        this.barStack.map(this.makeColumn.bind(this)),
+        this.makeXAxis(),
+        this.makeYAxis(),
+        this.makeLegend()
       );
     }
   }]);
@@ -57202,6 +57231,7 @@ var Column = function (_Component) {
         height: this.props.height(d),
         width: this.props.width,
         key: d.data.title + index,
+        data: d.data,
         title: d.data.title,
         setCurrPost: this.props.setCurrPost
       };
@@ -57213,7 +57243,7 @@ var Column = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         'g',
-        { fill: this.props.z(this.props.data) },
+        { fill: this.props.z(this.props.data), transform: 'translate(10,0)' },
         this.props.data.map(this.makeBars.bind(this))
       );
     }
@@ -57250,13 +57280,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //         key = "stacked-bar-" + data.key;
 
 var Bar = function Bar(props) {
-  // console.log(props);
+  var handleClick = function handleClick(url) {
+    window.open(url, '_blank');
+  };
   return _react2.default.createElement('rect', { x: props.x,
     y: props.y,
     height: props.height,
     width: props.width,
     onMouseEnter: function onMouseEnter(e) {
       return props.setCurrPost(props.title);
+    },
+    onClick: function onClick() {
+      return handleClick("http://www.reddit.com" + props.data.permalink);
     } });
 };
 
@@ -57354,6 +57389,208 @@ var XAxis = function (_Component) {
 }(_react.Component);
 
 exports.default = XAxis;
+
+/***/ }),
+/* 238 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(26);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(132);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _d = __webpack_require__(58);
+
+var d3 = _interopRequireWildcard(_d);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Need to pass height, axisMargin, data
+var YAxis = function (_Component) {
+  _inherits(YAxis, _Component);
+
+  function YAxis(props) {
+    _classCallCheck(this, YAxis);
+
+    var _this = _possibleConstructorReturn(this, (YAxis.__proto__ || Object.getPrototypeOf(YAxis)).call(this));
+
+    _this.yScale = d3.scaleLinear();
+    _this.axis = d3.axisLeft(_this.yScale);
+
+    _this.update_d3(props);
+    return _this;
+  }
+
+  _createClass(YAxis, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      this.update_d3(newProps);
+    }
+  }, {
+    key: 'update_d3',
+    value: function update_d3(props) {
+      this.yScale.domain([d3.max(props.data.map(function (d) {
+        return d.total;
+      })), 0])
+      // This might be height minus margins. Check it!
+      .range([0, props.height]);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.renderAxis();
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.renderAxis();
+    }
+  }, {
+    key: 'renderAxis',
+    value: function renderAxis() {
+      var node = _reactDom2.default.findDOMNode(this);
+      d3.select(node).call(this.axis);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var transform = 'translate(' + (this.props.margin.left - 40) + ',0)';
+      return _react2.default.createElement('g', { className: 'axis', transform: transform });
+    }
+  }]);
+
+  return YAxis;
+}(_react.Component);
+
+exports.default = YAxis;
+
+/***/ }),
+/* 239 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(26);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Key = __webpack_require__(240);
+
+var _Key2 = _interopRequireDefault(_Key);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Legend = function (_Component) {
+  _inherits(Legend, _Component);
+
+  function Legend(props) {
+    _classCallCheck(this, Legend);
+
+    var _this = _possibleConstructorReturn(this, (Legend.__proto__ || Object.getPrototypeOf(Legend)).call(this));
+
+    _this.state = {
+      keys: props.keys
+    };
+    return _this;
+  }
+
+  _createClass(Legend, [{
+    key: 'makeKeys',
+    value: function makeKeys(datum, i) {
+      // console.log(this.props.colours[i]);
+      // Colour has to be the reverse since the key maps are also reversed!
+      return _react2.default.createElement(_Key2.default, _extends({ datum: datum,
+        index: i,
+        key: datum + i,
+        colour: this.props.colours[this.props.colours.length - i - 1] }, this.props));
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'g',
+        { fontFamily: '\'Raleway\', sans-serif', fontSize: '10', textAnchor: 'end' },
+        this.props.keys.slice().reverse().map(this.makeKeys.bind(this))
+      );
+    }
+  }]);
+
+  return Legend;
+}(_react.Component);
+
+exports.default = Legend;
+
+/***/ }),
+/* 240 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(26);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Keys = function Keys(props) {
+  return _react2.default.createElement(
+    "g",
+    { transform: "translate(0," + props.index * 20 + ")" },
+    _react2.default.createElement("rect", { x: props.width - 19,
+      width: "19",
+      height: "19",
+      fill: props.colour }),
+    _react2.default.createElement(
+      "text",
+      { x: props.width - 24,
+        y: "9.5",
+        dy: "0.32em" },
+      props.datum
+    )
+  );
+};
+
+exports.default = Keys;
 
 /***/ })
 /******/ ]);

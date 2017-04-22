@@ -17,6 +17,7 @@ class Column extends Component {
       height: this.props.height(d),
       width: this.props.width,
       key: d.data.title + index,
+      data: d.data,
       title: d.data.title,
       setCurrPost: this.props.setCurrPost
     }
@@ -27,7 +28,7 @@ class Column extends Component {
   }
   render(){
     return (
-      <g fill={this.props.z(this.props.data)}>
+      <g fill={this.props.z(this.props.data)} transform="translate(10,0)">
         {this.props.data.map(this.makeBars.bind(this))}
       </g>
     );
