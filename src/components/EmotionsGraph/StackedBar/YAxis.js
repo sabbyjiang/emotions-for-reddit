@@ -29,7 +29,9 @@ class YAxis extends Component {
 
   renderAxis(){
     let node = ReactDOM.findDOMNode(this);
-    d3.select(node).call(this.axis);
+    d3.select(node).call(this.axis)
+      .selectAll("text")
+      .attr("font-family", "'Raleway', sans-serif");
   }
 
   render(){

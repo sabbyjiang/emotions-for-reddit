@@ -57216,21 +57216,14 @@ var Column = function (_Component) {
   _createClass(Column, [{
     key: 'makeBars',
 
-    // The below is just for reference. What was passed from the parent component
-    // const x = (d) => this.xScale(d.data.title),
-    //         y = (d) => this.yScale(d[1]),
-    //         z = (data) => this.zScale(data.key),
-    //         height = (d) => this.yScale(d[1]) - this.yScale(d[0]),
-    //         width = this.xScale.bandwidth(),
-    //         key = "stacked-bar-" + data.key;
-
+    // Having a weird issue where because of a same title of post (x-post) the second bar won't render
     value: function makeBars(d, index) {
       var props = {
         x: this.props.x(d),
         y: this.props.y(d),
         height: this.props.height(d),
         width: this.props.width,
-        key: d.data.title + index,
+        key: d.data.title + "-" + d.data.subreddit + "-" + index,
         data: d.data,
         title: d.data.title,
         setCurrPost: this.props.setCurrPost
@@ -57243,7 +57236,7 @@ var Column = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         'g',
-        { fill: this.props.z(this.props.data), transform: 'translate(10,0)' },
+        { fill: this.props.z(this.props.data) },
         this.props.data.map(this.makeBars.bind(this))
       );
     }
@@ -57270,14 +57263,6 @@ var _react = __webpack_require__(26);
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// The below is just for reference. What was passed from the parent component
-// const x = (d) => this.xScale(d.data.title),
-//         y = (d) => this.yScale(d[1]),
-//         z = (data) => this.zScale(data.key),
-//         height = (d) => this.yScale(d[1]) - this.yScale(d[0]),
-//         width = this.xScale.bandwidth(),
-//         key = "stacked-bar-" + data.key;
 
 var Bar = function Bar(props) {
   var handleClick = function handleClick(url) {
@@ -57374,14 +57359,15 @@ var XAxis = function (_Component) {
     key: 'renderAxis',
     value: function renderAxis() {
       var node = _reactDom2.default.findDOMNode(this);
-      d3.select(node).call(this.axis).selectAll("text").style("text-anchor", "end").attr("dx", "-.8em").attr("dy", ".15em").attr("transform", "rotate(-65)");
+      d3.select(node).call(this.axis).selectAll("text").style("text-anchor", "end").attr("font-family", "'Raleway', sans-serif").attr("dx", "-.8em").attr("dy", ".15em").attr("transform", "rotate(-65)");
     }
   }, {
     key: 'render',
     value: function render() {
       var transform = 'translate(0,' + this.props.height + ')';
       return _react2.default.createElement('g', { transform: transform,
-        className: 'x-axis' });
+        className: 'x-axis'
+      });
     }
   }]);
 
@@ -57469,7 +57455,7 @@ var YAxis = function (_Component) {
     key: 'renderAxis',
     value: function renderAxis() {
       var node = _reactDom2.default.findDOMNode(this);
-      d3.select(node).call(this.axis);
+      d3.select(node).call(this.axis).selectAll("text").attr("font-family", "'Raleway', sans-serif");
     }
   }, {
     key: 'render',

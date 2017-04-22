@@ -30,6 +30,7 @@ class XAxis extends Component {
     d3.select(node).call(this.axis)
       .selectAll("text")
         .style("text-anchor", "end")
+        .attr("font-family", "'Raleway', sans-serif")
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
         .attr("transform", "rotate(-65)");
@@ -39,7 +40,8 @@ class XAxis extends Component {
     const transform = `translate(0,${this.props.height})`;
     return (
       <g  transform={transform}
-          className="x-axis">
+          className="x-axis"
+          >
       </g>   
     );
   }
