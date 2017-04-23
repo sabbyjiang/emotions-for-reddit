@@ -4,7 +4,9 @@ const {getTone} = require('../../models/watson-functions');
 const {cleanData} = require('../../models/gen-functions');
 // All routes inside here are for ~/api/gen
 
-router.get('/hot', redditHot, getTone, cleanData, (req, res) => {
+router.get('/hot', 
+// redditHot, getTone, 
+cleanData, (req, res) => {
   const results = req.results;
   res.json(results);
 })

@@ -28,8 +28,11 @@ const cookieParse = (req, res, next) => {
 }
 
 const cleanData = (req, res, next) => {
-  const redditData = req.redditData;
-  const watsonData = req.watsonData;
+  const redditData = data[0];
+  const watsonData = data[1];
+
+  // const redditData = req.redditData;
+  // const watsonData = req.watsonData;
 
   // MUST BE WRITTEN THIS WAY
   // I know it's verbose but it's because of the way javascript handles passing by reference or value
