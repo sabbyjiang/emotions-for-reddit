@@ -1,4 +1,6 @@
 // Takes the cookies string from the request header and returns object with cookies in key-pair value
+
+const data = require('../db/hot/2017-04-22-18-17.js')
 const cookieParse = (req, res, next) => {
   // Only gets cookies if there are cookies
   if(req.headers.cookie){
@@ -25,7 +27,64 @@ const cookieParse = (req, res, next) => {
   next();
 }
 
-module.exports = {cookieParse}
+const cleanData = (req, res, next) => {
+  const redditData = req.redditData;
+  const watsonData = req.watsonData;
+
+  // MUST BE WRITTEN THIS WAY
+  // I know it's verbose but it's because of the way javascript handles passing by reference or value
+  let emotionalTone = redditData.reduce((newArr, post) => {
+    const title = post.title, 
+          subreddit = post.subreddit, 
+          permalink = post.permalink, 
+          score = post.score, 
+          over_18 = post.over_18;
+
+    return newArr.concat({title, subreddit, permalink, score, over_18});
+  }, []);
+  let languageTone = redditData.reduce((newArr, post) => {
+    const title = post.title, 
+          subreddit = post.subreddit, 
+          permalink = post.permalink, 
+          score = post.score, 
+          over_18 = post.over_18;
+
+    return newArr.concat({title, subreddit, permalink, score, over_18});
+  }, []);
+  let socialTone = redditData.reduce((newArr, post) => {
+    const title = post.title, 
+          subreddit = post.subreddit, 
+          permalink = post.permalink, 
+          score = post.score, 
+          over_18 = post.over_18;
+
+    return newArr.concat({title, subreddit, permalink, score, over_18});
+  }, []);
+
+  let allTones = [emotionalTone, languageTone, socialTone];
+
+  allTones.forEach((category, categoryIndex) => {
+    category.forEach((post, postIndex) => {
+      // This is an array of tone cateogries
+      let targetWatson = watsonData[postIndex].document_tone.tone_categories;
+
+      post["tone_category"] = targetWatson[categoryIndex].category_id;
+
+      post["tones"] = targetWatson[categoryIndex].tones;
+
+      targetWatson[categoryIndex].tones.forEach(tone => {
+        post[tone.tone_id] = tone.score;
+      });
+    })
+  })
+
+  req.results = allTones;
+
+  next();
+
+}
+
+module.exports = {cookieParse, cleanData}
 
 // const r = new snoowrap({
 //   userAgent: process.env.USER_AGENT,

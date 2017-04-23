@@ -4,6 +4,7 @@ const Bar = (props) => {
   const handleClick = (url) => {
     window.open(url, '_blank');
   }
+  
   return (
     <rect x={props.x}
           y={props.y}

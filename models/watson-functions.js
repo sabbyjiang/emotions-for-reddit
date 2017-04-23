@@ -29,10 +29,10 @@ const mergeData = (reddit, watson) => {
 }
 
 const getTone = (req, res, next) => {
-  const redditData = req.extractedData;
+  const redditData = req.redditData;
   Promise.all(toneMap(redditData))
     .then(results => {
-      req.results = mergeData(redditData, results);
+      req.watsonData = results;
       next();
     })
     .catch(err => {

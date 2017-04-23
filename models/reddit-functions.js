@@ -3,18 +3,25 @@ const snoowrap = require('snoowrap'),
       // fetch = require('node-fetch'),
       axios = require('axios');
 
-const reddit = (redditObj) => {
-  if(redditObj.clientId){
+// const reddit = (redditObj) => {
+//   if(redditObj.clientId){
 
-  }
-  const r = new snoowrap({
+//   }
+//   const r = new snoowrap({
+//     userAgent: process.env.USER_AGENT,
+//     clientId: process.env.REDDIT_CLIENT_ID,
+//     clientSecret: process.env.REDDIT_SECRET,
+//     refreshToken: process.env.REFRESH_TOKEN
+//   });
+//   return r;
+// }
+
+const r = new snoowrap({
     userAgent: process.env.USER_AGENT,
     clientId: process.env.REDDIT_CLIENT_ID,
     clientSecret: process.env.REDDIT_SECRET,
     refreshToken: process.env.REFRESH_TOKEN
   });
-  return r;
-}
 
 const numPosts = 50;
 
@@ -28,7 +35,7 @@ const redditHot = (req, res, next) => {
   r.getHot({amount: numPosts})
     .then(response => {
       const extractedData = extractData(response);
-      req.extractedData = extractedData;
+      req.redditData = extractedData;
       next();
     })
     .catch(err => {
@@ -40,7 +47,7 @@ const redditTop = (req, res, next) => {
   r.getTop({time: 'day', amount: numPosts})
     .then(response => {
       const extractedData = extractData(response);
-      req.extractedData = extractedData;
+      req.redditData = extractedData;
       next();
     })
     .catch(err => {
