@@ -6,7 +6,6 @@ import XAxis from './XAxis';
 import YAxis from './YAxis';
 import Legend from './Legend';
 
-
 // Let's test this with emotional range first;
 
 class StackedBar extends Component {
