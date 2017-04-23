@@ -19,14 +19,18 @@ class StackedBar extends Component {
 
     this.xScale = d3.scaleBand();
     this.yScale = d3.scaleLinear();
-    // This is taken from colour brewer
-    this.zScale = d3.scaleOrdinal().range(props.colours)
+    this.zScale = null 
     this.keys = [];
     this.barStack = null;
+    this.colours = null;
     this.update_d3(props);
   }
 
   componentWillReceiveProps(newProps){
+    this.update_d3(newProps);
+  }
+
+  componentWillUpdate(newProps){
     this.update_d3(newProps);
   }
 
@@ -43,13 +47,29 @@ class StackedBar extends Component {
         )
     });
 
-    data.sort((a, b) => b.total - a.total);
+    data.sort((a, b) => b[props.currentSort] - a[props.currentSort]);
 
+    // Must clear keys every time! 
+    this.keys = [];
+    data[0].tones.forEach(tone => {
+      // Change this to tone name
+      this.keys.push(tone.tone_name);
+    });
+    
+    this.colours = props.colours;
 
-    if(this.keys == false){
-      data[0].tones.forEach(tone => {
-        this.keys.push(tone.tone_id);
+    if(props.currentSort !== "total"){
+      let indexToMove = this.keys.indexOf(props.currentSort);
+      let toneToMove = this.keys.splice(indexToMove, 1);
+      this.keys = toneToMove.concat(this.keys);
+
+      let colourToMove = [props.colours.find((colour, index) => index === indexToMove)];
+
+      let restOfColours = props.colours.filter((colour, index) => {
+        return index !== indexToMove;
       });
+
+      this.colours = colourToMove.concat(restOfColours);
     }
     
     this.xScale
@@ -63,10 +83,12 @@ class StackedBar extends Component {
           .domain([0, d3.max(data, d => d.total)])
           .nice();
 
-    this.zScale
+    this.zScale = d3.scaleOrdinal().range(this.colours)
           .domain(this.keys);
-    // this ternary has to be here because about stack restacks into the old value on update... super weird
-    this.barStack = this.barStack ? this.barStack : d3.stack().keys(this.keys)(props.data);
+
+    // must clear barStack every time. Damn you React
+    this.barStack = [];
+    this.barStack = d3.stack().keys(this.keys)(props.data);
   }
 
   makeColumn(data, i){
@@ -102,7 +124,7 @@ class StackedBar extends Component {
   }
 
   makeLegend(){
-    return <Legend keys={this.keys} {...this.props} />
+    return <Legend keys={this.keys} {...this.props} newColours={this.colours}/>
   }
   
   render(){

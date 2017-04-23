@@ -13,4 +13,10 @@
 
 .axis text {
   font: 10px sans-serif;
+}body {
+  font-family: 'Raleway', sans-serf;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Playfair Display', serif;
 }

@@ -17,7 +17,8 @@ class Legend extends Component {
       <Key  datum={datum} 
             index={i} 
             key={datum + i} 
-            colour={this.props.colours[this.props.colours.length - i - 1]} {...this.props}/>
+            colour={this.props.newColours[this.props.keys.length - i - 1]} 
+            {...this.props}/>
     )
   }
   render(){
