@@ -5,6 +5,7 @@ import axios from 'axios';
 import StackedBar from './StackedBar';
 require('../../../styles/EmotionsGraph.css');
 import Sorting from './Sorting';
+import {baseURL} from '../../../config';
 
 class EmotionsGraph extends Component {
   constructor(){
@@ -21,8 +22,17 @@ class EmotionsGraph extends Component {
     this.setState({currentPost: title})
   }
 
-  componentWillMount(){
-    axios.get('/api/gen/hot')
+  componentDidMount(){
+    let queryURL = baseURL + "api";
+    const subreddit = this.props.match.params.subredditName;
+    if(subreddit){
+      queryURL += `/auth/analysis?subreddit=${subreddit}`;
+    } else {
+      queryURL += `/gen/hot`;
+    }
+    // console.log(queryURL);
+
+    axios.get(queryURL)
       .then(r => {
         this.setState({rawData: r.data, currentData: r.data[0]});
       })
@@ -54,9 +64,10 @@ class EmotionsGraph extends Component {
         </div>
       )
     } else {
+      console.log("data is longer now", this.state.rawData.length);
       return (
         <div>
-          <h1> Tone Analysis of Reddit's Top Posts of the last 24 hours</h1>
+          <h1> Tone Analysis of {this.props.match.params.subredditName ? `r/${this.props.match.params.subredditName}'s` : "Reddit's"} Hot Page</h1>
 
           <select onChange={this.changeCurrentData.bind(this)}>
             <option value="0">Emotion Tone</option>

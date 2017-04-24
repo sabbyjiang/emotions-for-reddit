@@ -1,20 +1,79 @@
 const snoowrap = require('snoowrap'),
       dotenv = require('dotenv').config(),
-      // fetch = require('node-fetch'),
+      Promise = require('bluebird'),
       axios = require('axios');
 
-// const reddit = (redditObj) => {
-//   if(redditObj.clientId){
+const getSnoowrap = (req, res, next) => {
+  const refresh = req.cookies.refresh;
 
-//   }
-//   const r = new snoowrap({
-//     userAgent: process.env.USER_AGENT,
-//     clientId: process.env.REDDIT_CLIENT_ID,
-//     clientSecret: process.env.REDDIT_SECRET,
-//     refreshToken: process.env.REFRESH_TOKEN
-//   });
-//   return r;
-// }
+  const r = new snoowrap({
+    userAgent: process.env.USER_AGENT,
+    clientId: process.env.REDDIT_CLIENT_ID,
+    clientSecret: process.env.REDDIT_SECRET,
+    refreshToken: refresh
+  });
+
+  req.r = r;
+
+  next();
+}
+
+const getSubscriptions = (req, res, next) => {
+
+  req.r.getSubscriptions({limit: 100})
+    .then(listing => {
+      req.listing = listing;
+      next();
+    })  
+}
+
+
+const getSubredditPosts = (req, res, next) => {
+  req.r.getSubreddit(req.query.subreddit).getHot()
+    .then(listing => {
+      req.listing = listing;
+      next();
+    })
+    .catch(err => console.log(err));
+}
+
+const massSubreddit = (srArray, snoowrap) => {
+  return srArray.map(sr => {
+    return snoowrap.getSubreddit(sr).getHot({limit: 25})
+      .then(r => r)
+  });
+}
+
+const getMassSubredditPosts = (req, res, next) => {
+  const srRaw = req.query.subreddits;
+  const srArray = srRaw.split(',');
+  Promise.all(massSubreddit(srArray, req.r))
+    .then(results => {
+      const extracted = results.map(sr => {
+        return extractData(sr);
+      })
+      req.rawReddit = extracted;
+      next();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+const getHotForRadar = (req, res, next) => {
+  req.r.getHot({amount: 25})
+    .then(results => {
+      const extracted = extractData(results);
+      req.rawDataWithHot = req.rawReddit.concat([extracted]);
+      next();
+    })
+}
+
+const cleanRedditData = (req, res, next) => {
+  const cleanedData = extractData(req.listing);
+  req.redditData = cleanedData;
+  next();
+}
 
 const r = new snoowrap({
     userAgent: process.env.USER_AGENT,
@@ -23,7 +82,7 @@ const r = new snoowrap({
     refreshToken: process.env.REFRESH_TOKEN
   });
 
-const numPosts = 50;
+const numPosts = 25;
 
 const extractData = (response) => {
   return response.map((post) => {
@@ -99,4 +158,4 @@ const refreshToken = (req, res, next) => {
     .catch(err => {console.log("err", err)});
 }
 
-module.exports = {redditHot, redditTop, getAuth, refreshToken};
+module.exports = {redditHot, redditTop, getAuth, refreshToken, getSnoowrap, getSubscriptions, getSubredditPosts, cleanRedditData, getMassSubredditPosts, getHotForRadar};

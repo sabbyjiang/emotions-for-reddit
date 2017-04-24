@@ -18,6 +18,13 @@ const toneMap = (redditData) => {
   })
 }
 
+const srMap = (redditData) => {
+  return redditData.map(sr => {
+    return promiseTone({text: sr})
+      .then(r => r);
+  })
+}
+
 const mergeData = (reddit, watson) => {
   let merged = reddit;
 
@@ -40,4 +47,26 @@ const getTone = (req, res, next) => {
     })
 }
 
-module.exports = {getTone}
+const getToneIndSub = (req, res, next) => {
+  const redditData = req.listing;
+  const wholePageDoc = redditData.reduce((document, post) => {
+    return document + post.title;
+  }, "");
+
+  promiseTone({text: wholePageDoc})
+    .then(results => {
+      req.results = results;
+      next();
+    });
+}
+
+const getToneMassSub = (req, res, next) => {
+  const redditData = req.redditForWatson;
+  Promise.all(srMap(redditData))
+    .then(results => {
+      req.results = results;
+      next();
+    })
+}
+
+module.exports = {getTone, getToneIndSub, getToneMassSub}
