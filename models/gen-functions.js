@@ -1,6 +1,7 @@
 // Takes the cookies string from the request header and returns object with cookies in key-pair value
 
-const data = require('../db/hot/2017-04-22-18-17.js')
+// const data = require('../db/hot/2017-04-22-18-17.js')
+const results = require('../db/sub-testing/2017-04-24-14-40.js');
 const cookieParse = (req, res, next) => {
   // Only gets cookies if there are cookies
   if(req.headers.cookie){
@@ -87,7 +88,71 @@ const cleanData = (req, res, next) => {
 
 }
 
-module.exports = {cookieParse, cleanData}
+const cleanSRArrayForWatson = (req, res, next) => {
+  const srArrayData = req.rawDataWithHot;
+  const redditForWatson = srArrayData.map(sr => {
+    return sr.reduce((document, post) => {
+      return document + post.title;
+    }, "");
+  });
+  req.redditForWatson = redditForWatson;
+  next();
+}
+
+const cleanForRadar = (req, res, next) => {
+  const srRaw = req.query.subreddits;
+  // const srRaw = 'gameofthrones,food';
+  const srArray = srRaw.split(',');
+  srArray.push('front-page');
+
+  const results = req.results;
+  
+  const cleaned = [];
+  results[0].document_tone.tone_categories.forEach((category, categoryIndex) => {
+    cleaned.push({category: category.category_name});
+    let target = cleaned[categoryIndex];
+    target.data = {variables: [], sets: []}
+    category.tones.forEach(tone => {
+      target.data.variables.push({key: tone.tone_id, label: tone.tone_name});
+    });
+  });
+
+  results.forEach((sr, srIndex) => {
+    sr.document_tone.tone_categories.forEach((category, categoryIndex) => {
+      cleaned[categoryIndex].data.sets.push({
+        key: srArray[srIndex],
+        label: `r/${srArray[srIndex]}`,
+        values: {}
+      });
+      category.tones.forEach((tone) => {
+        cleaned[categoryIndex].data.sets[srIndex].values[tone.tone_id] = tone.score;
+      })
+    })
+  })
+
+  req.cleaned = cleaned;
+
+  next();
+
+  // const holder = [];
+  // 
+  // results.forEach((sr, srIndex) => {
+  //   holder.push([]);
+  //   sr.document_tone.tone_categories.forEach((category, categoryIndex) => {
+  //     holder[srIndex].push({category: category.category_name});
+  //     let target = holder[srIndex][categoryIndex];
+  //     target.data = {variables: [], sets: [{key: srArray[srIndex], label: `r/${srArray[srIndex]}`, values: {}}]};
+  //     category.tones.forEach(tone => {
+  //       target.data.variables.push({key: tone.tone_id, label: tone.tone_name});
+  //       target.data.sets[0].values[tone.tone_id] = tone.score;
+  //     })
+  //   })
+  // })
+
+  // const cleaned = [];
+}
+
+module.exports = {cookieParse, cleanData, cleanForRadar, cleanSRArrayForWatson}
 
 // const r = new snoowrap({
 //   userAgent: process.env.USER_AGENT,

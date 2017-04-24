@@ -9,8 +9,6 @@ const express = require('express'),
       dotenv = require('dotenv').config(),
       RedditStrategy = require('passport-reddit').Strategy,
       session = require('express-session'),
-      // webpack = require('webpack'),
-      // config = require('./webpack.config.js'),
       PORT = process.env.PORT || 8080;
 
 // var compiler = webpack(config);
@@ -31,35 +29,6 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
-
-// app.use(require('webpack-dev-middleware')(compiler, {
-//   noInfo: true,
-//   publicPath: config.output.publicPath
-// }));
-
-// app.use(require('webpack-hot-middleware')(compiler));
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// passport.serializeUser((user, done) => {
-//   done(null, user);
-// });
-
-// passport.deserializeUser((obj, done) => {
-//   done(null, obj);
-// });
-
-// passport.use(new RedditStrategy({
-//     clientID: process.env.REDDIT_CLIENT_ID,
-//     clientSecret: process.env.REDDIT_SECRET,
-//     callbackURL: "http://localhost:8080/api/auth",
-//   },
-//   (accessToken, refreshToken, profile, done) => {
-//     console.log(accessToken);
-//     return done(null, profile);
-//   }
-// ));
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
