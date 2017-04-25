@@ -33048,7 +33048,7 @@ module.exports = canDefineProperty;
 "use strict";
 
 
-var baseURL = "http://localhost:8080/";
+var baseURL = "https://reddit-emotions.herokuapp.com/";
 
 module.exports = { baseURL: baseURL };
 
