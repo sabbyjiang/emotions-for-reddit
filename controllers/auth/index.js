@@ -32,6 +32,12 @@ router.get('/analysis', getSnoowrap, getSubredditPosts, cleanRedditData, getTone
   res.json(results);
 });
 
+router.get('/logout', (req, res) => {
+  clearCookie('access');
+  clearCookie('refresh');
+  res.redirect('/');
+})
+
 router.get('/', getAuth, (req, res) => {
   const reddit = req.reddit;
   res.cookie('access', reddit.access_token);
