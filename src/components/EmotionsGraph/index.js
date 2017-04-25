@@ -41,13 +41,13 @@ class EmotionsGraph extends Component {
   componentDidMount(){
     let queryURL = baseURL + "api";
     const subreddit = this.props.match.params.subredditName;
-    getData(subreddit);
+    this.getData(subreddit);
   }
 
   componentDidUpdate(prevProps, prevState){
     if(this.props.match.params.subredditName !== prevProps.match.params.subredditName){
       const newSubreddit = this.props.match.params.subredditName;
-      getData(newSubreddit);
+      this.getData(newSubreddit);
     }
   }
 

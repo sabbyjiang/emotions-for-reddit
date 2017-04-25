@@ -69878,14 +69878,14 @@ var EmotionsGraph = function (_Component) {
     value: function componentDidMount() {
       var queryURL = _config.baseURL + "api";
       var subreddit = this.props.match.params.subredditName;
-      getData(subreddit);
+      this.getData(subreddit);
     }
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
       if (this.props.match.params.subredditName !== prevProps.match.params.subredditName) {
         var newSubreddit = this.props.match.params.subredditName;
-        getData(newSubreddit);
+        this.getData(newSubreddit);
       }
     }
   }, {
