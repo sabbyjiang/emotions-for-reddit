@@ -1,0 +1,16 @@
+.histogram .bar rect {
+  fill: steelblue;
+}
+.histogram .bar text {
+  fill: #fff;
+  font: 12px sans-serif;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
