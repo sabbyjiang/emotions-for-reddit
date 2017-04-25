@@ -5,17 +5,20 @@ const snoowrap = require('snoowrap'),
 
 const getSnoowrap = (req, res, next) => {
   const refresh = req.cookies.refresh;
+  if(!refresh){
+    res.redirect('/');
+  } else {
+    const r = new snoowrap({
+      userAgent: process.env.USER_AGENT,
+      clientId: process.env.REDDIT_CLIENT_ID,
+      clientSecret: process.env.REDDIT_SECRET,
+      refreshToken: refresh
+    });
 
-  const r = new snoowrap({
-    userAgent: process.env.USER_AGENT,
-    clientId: process.env.REDDIT_CLIENT_ID,
-    clientSecret: process.env.REDDIT_SECRET,
-    refreshToken: refresh
-  });
+    req.r = r;
 
-  req.r = r;
-
-  next();
+    next();
+  }
 }
 
 const getSubscriptions = (req, res, next) => {

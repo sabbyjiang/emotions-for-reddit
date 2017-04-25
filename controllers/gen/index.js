@@ -11,7 +11,7 @@ router.get('/hot',
     // const results = req.results;
     const results = data;
     res.json(results);
-})
+});
 
 router.get('/top', redditTop, getTone, cleanData, (req, res) => {
   const results = req.results;

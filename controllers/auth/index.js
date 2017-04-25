@@ -33,9 +33,11 @@ router.get('/analysis', getSnoowrap, getSubredditPosts, cleanRedditData, getTone
 });
 
 router.get('/logout', (req, res) => {
-  clearCookie('access');
-  clearCookie('refresh');
+  res.cookie('access', "");
+  res.cookie('refresh', "");
+  res.cookie('connect.sid', "");
   res.redirect('/');
+  // res.redirect('/');
 })
 
 router.get('/', getAuth, (req, res) => {
