@@ -4,7 +4,8 @@ import Radar from 'react-d3-radar';
 import Axios from 'axios';
 import {baseURL} from '../../../../config';
 import Legend from './Legend';
-const data = require('../../../../db/sub-testing/2017-04-24-14-40-cleaned');
+// const data = require('../../../../db/sub-testing/2017-04-24-14-40-cleaned');
+require('../../../../styles/Radar.css');
 
 class RadarChart extends Component {
   constructor(){
@@ -43,15 +44,17 @@ class RadarChart extends Component {
   
 
   render(){
-    console.log(this.props);
     if(!this.state.data.length){
       return(
-        <h1> Loading Data </h1>
+        <div className="center window">
+          <div className="alert">
+            <h2> Loading Your Data... </h2>
+          </div>
+        </div>
       )
     } else {
-      console.log(this.state.data);
       return (
-        <div className="radar">
+        <div className="App landing radar">
           <Radar
             width={500}
             height={500}
