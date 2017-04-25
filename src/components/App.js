@@ -16,6 +16,7 @@ class App extends Component {
           <p> Or log in to see data from your own subreddits </p>
           <p> More features coming soon </p>
           <p className="text-c">
+            {/*This has to stay this way. How the app redirects*/}
             <a href="https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=https://reddit-emotions.herokuapp.com/api/auth/&duration=permanent&scope=identity,history,mysubreddits,read">Login</a>
           </p>
         </div>

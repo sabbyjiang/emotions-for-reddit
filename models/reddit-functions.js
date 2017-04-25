@@ -3,8 +3,11 @@ const snoowrap = require('snoowrap'),
       Promise = require('bluebird'),
       axios = require('axios');
 
+// gets the snoowrap instance in order to ping the reddit API
+// Will return user specific if they are logged in or the app client if they are not
 const getSnoowrap = (req, res, next) => {
   const refresh = req.cookies.refresh;
+
   if(!refresh){
     res.redirect('/');
   } else {
@@ -14,23 +17,21 @@ const getSnoowrap = (req, res, next) => {
       clientSecret: process.env.REDDIT_SECRET,
       refreshToken: refresh
     });
-
     req.r = r;
-
     next();
   }
 }
 
+// Gets the subscriptions and limits it to 100 (this is the highest you can get from reddit)
 const getSubscriptions = (req, res, next) => {
-
   req.r.getSubscriptions({limit: 100})
     .then(listing => {
       req.listing = listing;
       next();
-    })  
+    });
 }
 
-
+// gets the current hot posts from the specific subreddit in question
 const getSubredditPosts = (req, res, next) => {
   req.r.getSubreddit(req.query.subreddit).getHot()
     .then(listing => {
@@ -40,6 +41,7 @@ const getSubredditPosts = (req, res, next) => {
     .catch(err => console.log(err));
 }
 
+// gets called by getMassSubredditPosts in order to get the results of each subreddit
 const massSubreddit = (srArray, snoowrap) => {
   return srArray.map(sr => {
     return snoowrap.getSubreddit(sr).getHot({limit: 25})
@@ -47,6 +49,7 @@ const massSubreddit = (srArray, snoowrap) => {
   });
 }
 
+// gets the data from all the subreddits queried!
 const getMassSubredditPosts = (req, res, next) => {
   const srRaw = req.query.subreddits;
   const srArray = srRaw.split(',');
@@ -63,6 +66,7 @@ const getMassSubredditPosts = (req, res, next) => {
     });
 }
 
+// Gets the hot posts from subreddits for the radar chart
 const getHotForRadar = (req, res, next) => {
   req.r.getHot({amount: 25})
     .then(results => {
@@ -72,18 +76,20 @@ const getHotForRadar = (req, res, next) => {
     })
 }
 
+// extract the relevant data from the listing
 const cleanRedditData = (req, res, next) => {
   const cleanedData = extractData(req.listing);
   req.redditData = cleanedData;
   next();
 }
 
-const r = new snoowrap({
-    userAgent: process.env.USER_AGENT,
-    clientId: process.env.REDDIT_CLIENT_ID,
-    clientSecret: process.env.REDDIT_SECRET,
-    refreshToken: process.env.REFRESH_TOKEN
-  });
+// these have to stay this way because they're used for the gen functions
+// const r = new snoowrap({
+//     userAgent: process.env.USER_AGENT,
+//     clientId: process.env.REDDIT_CLIENT_ID,
+//     clientSecret: process.env.REDDIT_SECRET,
+//     refreshToken: process.env.REFRESH_TOKEN
+//   });
 
 const numPosts = 25;
 
@@ -94,7 +100,7 @@ const extractData = (response) => {
 }
 
 const redditHot = (req, res, next) => {
-  r.getHot({amount: numPosts})
+  req.r.getHot({amount: numPosts})
     .then(response => {
       const extractedData = extractData(response);
       req.redditData = extractedData;
@@ -106,7 +112,7 @@ const redditHot = (req, res, next) => {
 }
 
 const redditTop = (req, res, next) => {
-  r.getTop({time: 'day', amount: numPosts})
+  req.r.getTop({time: 'day', amount: numPosts})
     .then(response => {
       const extractedData = extractData(response);
       req.redditData = extractedData;
