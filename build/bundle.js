@@ -44776,7 +44776,7 @@ var App = function (_Component) {
             { className: 'text-c' },
             _react2.default.createElement(
               'a',
-              { href: 'https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=https%3A%2F%2Freddit-emotions.herokuapp.com%2Fapi%2Fauth&duration=permanent&scope=identity,history,mysubreddits,read' },
+              { href: 'https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=https://reddit-emotions.herokuapp.com/api/auth/&duration=permanent&scope=identity,history,mysubreddits,read' },
               'Login'
             )
           )
