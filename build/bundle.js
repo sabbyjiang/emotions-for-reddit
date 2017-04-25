@@ -70029,6 +70029,8 @@ var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(191);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 __webpack_require__(484);
@@ -70041,6 +70043,33 @@ var Header = function Header() {
       'h1',
       null,
       ' Emotions for Reddit '
+    ),
+    _react2.default.createElement(
+      'nav',
+      null,
+      _react2.default.createElement(
+        'h5',
+        null,
+        'Front Page Analysis'
+      ),
+      _react2.default.createElement(
+        'li',
+        null,
+        _react2.default.createElement(
+          _reactRouterDom.Link,
+          { to: '/chart/top' },
+          'Top Posts'
+        )
+      ),
+      _react2.default.createElement(
+        'li',
+        null,
+        _react2.default.createElement(
+          _reactRouterDom.Link,
+          { to: '/chart/hot' },
+          'Hot Posts'
+        )
+      )
     )
   );
 };
