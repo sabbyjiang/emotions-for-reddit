@@ -70063,13 +70063,13 @@ var Header = function Header() {
       'nav',
       null,
       _react2.default.createElement(
-        'h5',
-        null,
-        'Front Page Analyses:'
-      ),
-      _react2.default.createElement(
         'ul',
         null,
+        _react2.default.createElement(
+          'h5',
+          null,
+          'Front Page Analyses:'
+        ),
         _react2.default.createElement(
           'li',
           null,
@@ -70086,6 +70086,19 @@ var Header = function Header() {
             _reactRouterDom.Link,
             { to: '/chart/hot' },
             'Hot Posts'
+          )
+        )
+      ),
+      _react2.default.createElement(
+        'ul',
+        null,
+        _react2.default.createElement(
+          'li',
+          null,
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/home' },
+            'Home'
           )
         ),
         _react2.default.createElement(
