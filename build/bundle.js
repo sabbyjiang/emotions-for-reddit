@@ -69855,12 +69855,12 @@ var EmotionsGraph = function (_Component) {
       this.setState({ currentPost: title });
     }
   }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
+    key: 'getData',
+    value: function getData(subreddit) {
       var _this2 = this;
 
       var queryURL = _config.baseURL + "api";
-      var subreddit = this.props.match.params.subredditName;
+
       if (subreddit !== "hot" && subreddit !== "top") {
         queryURL += '/auth/analysis?subreddit=' + subreddit;
       } else {
@@ -69872,6 +69872,21 @@ var EmotionsGraph = function (_Component) {
       }).catch(function (err) {
         return alert("err", err);
       });
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var queryURL = _config.baseURL + "api";
+      var subreddit = this.props.match.params.subredditName;
+      getData(subreddit);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      if (this.props.match.params.subredditName !== prevProps.match.params.subredditName) {
+        var newSubreddit = this.props.match.params.subredditName;
+        getData(newSubreddit);
+      }
     }
   }, {
     key: 'changeCurrentData',
