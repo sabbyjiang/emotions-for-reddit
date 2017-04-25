@@ -215,7 +215,6 @@ nav h5 {
 
 nav {
   display: flex;
-  width: 40vw;
   min-width: 300px;
   justify-content: space-around;
   flex-wrap: wrap;
