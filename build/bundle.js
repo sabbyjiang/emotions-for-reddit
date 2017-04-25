@@ -68815,7 +68815,6 @@ var Legend = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      console.log(this.props);
       return _react2.default.createElement(
         'svg',
         { className: 'legend', width: '100', height: "" + this.props.srArray.length * 22 },
@@ -68890,7 +68889,8 @@ var RadarChart = function (_Component) {
     var _this = _possibleConstructorReturn(this, (RadarChart.__proto__ || Object.getPrototypeOf(RadarChart)).call(this));
 
     _this.state = {
-      data: []
+      data: [],
+      currentData: []
     };
     return _this;
   }
@@ -68905,15 +68905,23 @@ var RadarChart = function (_Component) {
         params: {
           subreddits: srString }
       }).then(function (r) {
-        _this2.setState({ data: r.data });
+        _this2.setState({ data: r.data, currentData: r.data[0] });
       }).catch(function (err) {
         return console.log(err);
       });
     }
   }, {
+    key: 'changeCurrentData',
+    value: function changeCurrentData(e) {
+      var newCurrentDataIndex = e.target.value;
+      this.setState(function (prevState) {
+        return { currentData: prevState.data[newCurrentDataIndex] };
+      });
+    }
+  }, {
     key: 'createLabels',
     value: function createLabels() {
-      var srArray = this.state.data[0].data.sets.map(function (set) {
+      var srArray = this.state.currentData.data.sets.map(function (set) {
         return set.label;
       });
       var params = {
@@ -68945,13 +68953,45 @@ var RadarChart = function (_Component) {
         return _react2.default.createElement(
           'div',
           { className: 'App landing radar' },
+          _react2.default.createElement(
+            'div',
+            { className: 'radar-graph graph-options-container' },
+            _react2.default.createElement(
+              'div',
+              { className: 'graph-options' },
+              _react2.default.createElement(
+                'h3',
+                null,
+                ' Analysis Type: '
+              ),
+              _react2.default.createElement(
+                'select',
+                { onChange: this.changeCurrentData.bind(this) },
+                _react2.default.createElement(
+                  'option',
+                  { value: '0' },
+                  'Emotion Tone'
+                ),
+                _react2.default.createElement(
+                  'option',
+                  { value: '1' },
+                  'Language Tone'
+                ),
+                _react2.default.createElement(
+                  'option',
+                  { value: '2' },
+                  'Social Tone'
+                )
+              )
+            )
+          ),
           _react2.default.createElement(_reactD3Radar2.default, {
             width: 500,
             height: 500,
             padding: 70,
             domainMax: 1,
             highlighted: null,
-            data: this.state.data[0].data
+            data: this.state.currentData.data
           }),
           this.createLabels()
         );

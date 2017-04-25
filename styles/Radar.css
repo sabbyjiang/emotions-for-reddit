@@ -1,3 +1,9 @@
 .radar {
   justify-content: center;
 }
+
+.radar-graph {
+  justify-content: space-around;
+  text-align: center;
+  width: 100%;
+}

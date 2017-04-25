@@ -14,7 +14,6 @@ class Legend extends Component {
     )
   }
   render(){
-  console.log(this.props);
     return (
       <svg className="legend" width="100" height={"" + this.props.srArray.length * 22}>
         <g fontSize="10" textAnchor="end">

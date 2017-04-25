@@ -12,6 +12,7 @@ class RadarChart extends Component {
     super();
     this.state = {
       data: [],
+      currentData: []
     }
   }
 
@@ -22,13 +23,20 @@ class RadarChart extends Component {
         subreddits: srString}
       })
       .then(r => {
-        this.setState({data: r.data});
+        this.setState({data: r.data, currentData: r.data[0]});
       })
       .catch(err => console.log(err));
   }
 
+  changeCurrentData(e){
+    const newCurrentDataIndex = e.target.value;
+    this.setState(prevState => {
+      return {currentData: prevState.data[newCurrentDataIndex]}
+    })
+  }
+
   createLabels(){
-    const srArray = this.state.data[0].data.sets.map(set => {
+    const srArray = this.state.currentData.data.sets.map(set => {
       return set.label
     });
     const params = {
@@ -55,13 +63,23 @@ class RadarChart extends Component {
     } else {
       return (
         <div className="App landing radar">
+          <div className="radar-graph graph-options-container">
+            <div className="graph-options">
+              <h3> Analysis Type: </h3>
+              <select onChange={this.changeCurrentData.bind(this)}>
+                <option value="0">Emotion Tone</option>
+                <option value="1">Language Tone</option>
+                <option value="2">Social Tone</option>
+              </select>
+            </div>
+          </div>
           <Radar
             width={500}
             height={500}
             padding={70}
             domainMax={1}
             highlighted={null} 
-            data = {this.state.data[0].data}
+            data = {this.state.currentData.data}
             />
           {this.createLabels()}
         </div>

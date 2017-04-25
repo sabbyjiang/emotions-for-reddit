@@ -155,6 +155,12 @@ a:hover {
   color: hsl(207, 44%, 70%);
 }.radar {
   justify-content: center;
+}
+
+.radar-graph {
+  justify-content: space-around;
+  text-align: center;
+  width: 100%;
 }.post-title {
   width: 40vw;
   min-width: 400px;
