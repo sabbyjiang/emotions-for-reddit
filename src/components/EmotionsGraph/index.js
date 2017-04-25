@@ -22,9 +22,9 @@ class EmotionsGraph extends Component {
     this.setState({currentPost: title})
   }
 
-  componentDidMount(){
+  getData(subreddit){
     let queryURL = baseURL + "api";
-    const subreddit = this.props.match.params.subredditName;
+
     if(subreddit !== "hot" && subreddit !== "top"){
       queryURL += `/auth/analysis?subreddit=${subreddit}`;
     } else {
@@ -35,7 +35,20 @@ class EmotionsGraph extends Component {
       .then(r => {
         this.setState({rawData: r.data, currentData: r.data[0]});
       })
-      .catch(err => alert("err", err))
+      .catch(err => alert("err", err));
+  }
+
+  componentDidMount(){
+    let queryURL = baseURL + "api";
+    const subreddit = this.props.match.params.subredditName;
+    getData(subreddit);
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if(this.props.match.params.subredditName !== prevProps.match.params.subredditName){
+      const newSubreddit = this.props.match.params.subredditName;
+      getData(newSubreddit);
+    }
   }
 
   changeCurrentData(e){
