@@ -63,7 +63,7 @@ class RadarChart extends Component {
     } else {
       return (
         <div className="App landing radar">
-          <div className="radar-graph graph-options-container">
+          <div className="radar-graph">
             <div className="graph-options">
               <h3> Analysis Type: </h3>
               <select onChange={this.changeCurrentData.bind(this)}>

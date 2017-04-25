@@ -158,12 +158,15 @@ a:hover {
 }
 
 .radar-graph {
+  display: flex;
   justify-content: space-around;
-  text-align: center;
   width: 100%;
   min-width: 400px;
   margin-top: 100px;
-}.post-title {
+  padding: 0 50px;
+  text-align: center;
+}
+.post-title {
   width: 40vw;
   min-width: 400px;
 }

@@ -68955,7 +68955,7 @@ var RadarChart = function (_Component) {
           { className: 'App landing radar' },
           _react2.default.createElement(
             'div',
-            { className: 'radar-graph graph-options-container' },
+            { className: 'radar-graph' },
             _react2.default.createElement(
               'div',
               { className: 'graph-options' },
