@@ -44845,21 +44845,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 __webpack_require__(480);
 
-// ReactDOM.render(
-//   <App />,
-//   document.querySelector('#root')
-// );
-
-// Stuff below here is for d3
-// import H1BGraph from './components/H1BGraph';
-
-
-// ReactDOM.render(
-//   <H1BGraph url="./data/h1bs.csv"/>, 
-//   document.querySelector('.h1bgraph')
-// )
-
-
+// this creates a capitalization function for the string
 String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
@@ -44867,12 +44853,6 @@ String.prototype.capitalize = function () {
 String.prototype.decapitalize = function () {
     return this.charAt(0).toLowerCase() + this.slice(1);
 };
-// import EmotionsGraph from './components/EmotionsGraph';
-
-// ReactDOM.render(
-//   <EmotionsGraph url="./data/2017-04-19-18-11"/>, 
-//   document.querySelector('.stacked-bar')
-// )
 
 _reactDom2.default.render(_Router2.default, document.getElementById('root'));
 
@@ -69868,11 +69848,15 @@ var EmotionsGraph = function (_Component) {
       }
 
       _axios2.default.get(queryURL).then(function (r) {
+        // currentData defaults to Emotional Tone Analysis
         _this2.setState({ rawData: r.data, currentData: r.data[0] });
       }).catch(function (err) {
         return alert("err", err);
       });
     }
+
+    // only does axios call after mounting/updating
+
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
@@ -69908,7 +69892,9 @@ var EmotionsGraph = function (_Component) {
       var margin = { top: 20, right: 40, bottom: 30, left: 40 },
           width = 900 - margin.left - margin.right,
           height = 450 - margin.top - margin.bottom,
-          colours = ['HSL(359, 80%, 70%)', 'HSL(118, 49%, 68%)', 'HSL(292, 35%, 64%)', 'HSL(45, 94%, 74%)', 'HSL(207, 54%, 60%)'];
+
+      // taken from colour brewer then upped in lightness because they were just too much
+      colours = ['HSL(359, 80%, 70%)', 'HSL(118, 49%, 68%)', 'HSL(292, 35%, 64%)', 'HSL(45, 94%, 74%)', 'HSL(207, 54%, 60%)'];
       var params = { margin: margin, width: width, height: height, colours: colours };
       if (!this.state.rawData.length) {
         return _react2.default.createElement(

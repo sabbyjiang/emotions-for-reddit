@@ -33,11 +33,13 @@ class EmotionsGraph extends Component {
 
     axios.get(queryURL)
       .then(r => {
+        // currentData defaults to Emotional Tone Analysis
         this.setState({rawData: r.data, currentData: r.data[0]});
       })
       .catch(err => alert("err", err));
   }
 
+  // only does axios call after mounting/updating
   componentDidMount(){
     let queryURL = baseURL + "api";
     const subreddit = this.props.match.params.subredditName;
@@ -67,6 +69,7 @@ class EmotionsGraph extends Component {
     const margin = {top: 20, right: 40, bottom: 30, left: 40},
           width = 900 - margin.left - margin.right,
           height = 450 - margin.top - margin.bottom,
+          // taken from colour brewer then upped in lightness because they were just too much
           colours = ['HSL(359, 80%, 70%)','HSL(118, 49%, 68%)','HSL(292, 35%, 64%)','HSL(45, 94%, 74%)','HSL(207, 54%, 60%)'];
     const params = {margin, width, height, colours};
     if(!this.state.rawData.length){
