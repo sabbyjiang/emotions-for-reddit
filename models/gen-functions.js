@@ -1,8 +1,7 @@
-// The below are test datas so we don't overuse Watson
-// const data = require('../db/hot/2017-04-22-18-17.js')
-// const results = require('../db/sub-testing/2017-04-24-14-40.js');
+// Takes the cookies string from the request header and returns object with cookies in key-pair value
 
-// Cookie parser broke with react so I made a middleware for it
+// const data = require('../db/hot/2017-04-22-18-17.js')
+const results = require('../db/sub-testing/2017-04-24-14-40.js');
 const cookieParse = (req, res, next) => {
   // Only gets cookies if there are cookies
   if(req.headers.cookie){
@@ -25,18 +24,20 @@ const cookieParse = (req, res, next) => {
     // Returns the object
     req.cookies = cookiesParsed;
   } 
+  
   next();
 }
 
-// cleans data in a way that D3 will understand
 const cleanData = (req, res, next) => {
-  // reason why this is so complicated is because the reddit data is a array of posts, the watson data is a array of posts with nested categories per post, and d3 wants an array of categories with nested posts.... 
+  // const redditData = data[0];
+  // const watsonData = data[1];
+
   const redditData = req.redditData;
   const watsonData = req.watsonData;
 
   // MUST BE WRITTEN THIS WAY
   // I know it's verbose but it's because of the way javascript handles passing by reference or value
-  const reduceData = (newArr, post) => {
+  let emotionalTone = redditData.reduce((newArr, post) => {
     const title = post.title, 
           subreddit = post.subreddit, 
           permalink = post.permalink, 
@@ -44,30 +45,37 @@ const cleanData = (req, res, next) => {
           over_18 = post.over_18;
 
     return newArr.concat({title, subreddit, permalink, score, over_18});
-  }
+  }, []);
+  let languageTone = redditData.reduce((newArr, post) => {
+    const title = post.title, 
+          subreddit = post.subreddit, 
+          permalink = post.permalink, 
+          score = post.score, 
+          over_18 = post.over_18;
 
-  // Damn you javascript and your passing by object reference
-  let emotionalTone = redditData.reduce(reduceData(newArr, post), []);
-  let languageTone = redditData.reduce(reduceData(newArr, post), []);
-  let socialTone = redditData.reduce(reduceData(newArr, post), []);
+    return newArr.concat({title, subreddit, permalink, score, over_18});
+  }, []);
+  let socialTone = redditData.reduce((newArr, post) => {
+    const title = post.title, 
+          subreddit = post.subreddit, 
+          permalink = post.permalink, 
+          score = post.score, 
+          over_18 = post.over_18;
+
+    return newArr.concat({title, subreddit, permalink, score, over_18});
+  }, []);
 
   let allTones = [emotionalTone, languageTone, socialTone];
 
-  // for each tone category (see above) do each
   allTones.forEach((category, categoryIndex) => {
-    // for each category do for post
     category.forEach((post, postIndex) => {
-
       // This is an array of tone cateogries
       let targetWatson = watsonData[postIndex].document_tone.tone_categories;
 
-      // Get the category (i.e. emotion, language, or social)
       post["tone_category"] = targetWatson[categoryIndex].category_id;
 
-      // Get the tones from the category as an array (this is used in D3 to get the keys more easily)
       post["tones"] = targetWatson[categoryIndex].tones;
 
-      // Get the actual tones in a format D3 wants
       targetWatson[categoryIndex].tones.forEach(tone => {
         post[tone.tone_name] = tone.score;
       });
@@ -80,8 +88,6 @@ const cleanData = (req, res, next) => {
 
 }
 
-// Cleans the subreddit array for watson processing
-// Takes the array of subreddit posts and flattens it into one long document, not changing the structure of the posts
 const cleanSRArrayForWatson = (req, res, next) => {
   const srArrayData = req.rawDataWithHot;
   const redditForWatson = srArrayData.map(sr => {
@@ -93,23 +99,15 @@ const cleanSRArrayForWatson = (req, res, next) => {
   next();
 }
 
-// Cleans the data for the radar
 const cleanForRadar = (req, res, next) => {
-  // this is the raw subreddit list (e.g. 'gameofthrones,food')
   const srRaw = req.query.subreddits;
-
-  // Splits the string into array by comma
+  // const srRaw = 'gameofthrones,food';
   const srArray = srRaw.split(',');
-  // front-page is always the last thing that is checked!
-  srArray.push('frontpage');
+  srArray.push('front-page');
 
-  // results are the results from the watson side
   const results = req.results;
   
   const cleaned = [];
-  
-  // This iterates over the results and adds the values to the array called cleaned
-  // radar-d3-react is adamant about the way this is formatted
   results[0].document_tone.tone_categories.forEach((category, categoryIndex) => {
     cleaned.push({category: category.category_name});
     let target = cleaned[categoryIndex];
@@ -135,6 +133,128 @@ const cleanForRadar = (req, res, next) => {
   req.cleaned = cleaned;
 
   next();
+
+  // const holder = [];
+  // 
+  // results.forEach((sr, srIndex) => {
+  //   holder.push([]);
+  //   sr.document_tone.tone_categories.forEach((category, categoryIndex) => {
+  //     holder[srIndex].push({category: category.category_name});
+  //     let target = holder[srIndex][categoryIndex];
+  //     target.data = {variables: [], sets: [{key: srArray[srIndex], label: `r/${srArray[srIndex]}`, values: {}}]};
+  //     category.tones.forEach(tone => {
+  //       target.data.variables.push({key: tone.tone_id, label: tone.tone_name});
+  //       target.data.sets[0].values[tone.tone_id] = tone.score;
+  //     })
+  //   })
+  // })
+
+  // const cleaned = [];
 }
 
 module.exports = {cookieParse, cleanData, cleanForRadar, cleanSRArrayForWatson}
+
+// const r = new snoowrap({
+//   userAgent: process.env.USER_AGENT,
+//   clientId: process.env.REDDIT_CLIENT_ID,
+//   clientSecret: process.env.REDDIT_SECRET,
+//   refreshToken: process.env.REFRESH_TOKEN
+// });
+
+// const tone_analyzer = watson.tone_analyzer({
+//   username: process.env.IBM_UN,
+//   password: process.env.IBM_PW,
+//   version: 'v3',
+//   version_date: '2016-05-19'
+// });
+
+// // merges data back together so that it's flatter
+// const mergeData = (reddit, watson) => {
+//   let merged = reddit;
+
+//   merged.forEach((post, i) => {
+//     post["tones"] = watson[i].document_tone;
+//   });
+
+//   return merged;
+// }
+
+
+// Breakpoints 0 < not likely < 0.5 < likely < 0.75 < very likely
+// app.get('/api/gen/hot', (req, res) => {
+//   r.getHot({amount: 40})
+//     .then(response => {
+//       const redditData = response.map((post) => {
+//         return {title: post.title, subreddit: post.subreddit_name_prefixed, permalink: post.permalink, score: post.score, over_18: post.over_18}
+//       });
+      
+//       // hard coded function
+//       // MUST PROMISIFY THE TONE ANALYZER 
+//       // why isn't this a promise to begin with. UGH.
+//       const promiseTone = Promise.promisify(tone_analyzer.tone, {context: tone_analyzer});
+
+//       const toneMap = (redditData) => {
+//         return redditData.map(post => {
+//           return promiseTone({text: post.title})
+//             .then(r => r)
+//         })
+//       }
+
+//       Promise.all(toneMap(redditData))
+//         .then(results => {
+//             // const emotionTone = results.map(postres => {
+//             //   return postres.document_tone.tone_categories.find(t => t.category_id === "emotion_tone")});
+//             // const languageTone = results.map(postres => {
+//             //   return postres.document_tone.tone_categories.find(t => t.category_id === "language_tone")});
+//             // const socialTone = results.map(postres => {
+//             //   return postres.document_tone.tone_categories.find(t => t.category_id === "social_tone")});
+
+//             let data = mergeData(redditData, results);
+//             console.log(data);
+
+//             res.json({results: data});
+//         })
+//         .catch(err => {
+//           res.json({err:err});
+//         })
+//     })
+// })
+
+// app.get('/api/gen/top', (req, res) => {
+//   r.getTop({time: 'day', count: 50})
+//   .then(response => {
+//       const redditData = response.map((post) => {
+//         return {title: post.title, subreddit: post.subreddit_name_prefixed, permalink: post.permalink, score: post.score, over_18: post.over_18}
+//       });
+      
+//       // hard coded function
+//       // MUST PROMISIFY THE TONE ANALYZER 
+//       // why isn't this a promise to begin with. UGH.
+//       const promiseTone = Promise.promisify(tone_analyzer.tone, {context: tone_analyzer});
+
+//       const toneMap = (redditData) => {
+//         return redditData.map(post => {
+//           return promiseTone({text: post.title})
+//             .then(r => r)
+//         })
+//       }
+
+//       Promise.all(toneMap(redditData))
+//         .then(results => {
+//             // const emotionTone = results.map(postres => {
+//             //   return postres.document_tone.tone_categories.find(t => t.category_id === "emotion_tone")});
+//             // const languageTone = results.map(postres => {
+//             //   return postres.document_tone.tone_categories.find(t => t.category_id === "language_tone")});
+//             // const socialTone = results.map(postres => {
+//             //   return postres.document_tone.tone_categories.find(t => t.category_id === "social_tone")});
+
+//             let data = mergeData(redditData, results);
+//             console.log(data);
+
+//             res.json({results: data});
+//         })
+//         .catch(err => {
+//           res.json({err:err});
+//         })
+//     })
+// });
