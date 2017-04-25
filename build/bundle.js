@@ -69861,10 +69861,10 @@ var EmotionsGraph = function (_Component) {
 
       var queryURL = _config.baseURL + "api";
       var subreddit = this.props.match.params.subredditName;
-      if (subreddit) {
+      if (subreddit !== "hot" && subreddit !== "top") {
         queryURL += '/auth/analysis?subreddit=' + subreddit;
       } else {
-        queryURL += '/gen/hot';
+        queryURL += '/gen/' + subreddit;
       }
 
       _axios2.default.get(queryURL).then(function (r) {
@@ -70050,24 +70050,37 @@ var Header = function Header() {
       _react2.default.createElement(
         'h5',
         null,
-        'Front Page Analysis'
+        'Front Page Analyses:'
       ),
       _react2.default.createElement(
-        'li',
+        'ul',
         null,
         _react2.default.createElement(
-          _reactRouterDom.Link,
-          { to: '/chart/top' },
-          'Top Posts'
-        )
-      ),
-      _react2.default.createElement(
-        'li',
-        null,
+          'li',
+          null,
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/chart/top' },
+            'Top Posts'
+          )
+        ),
         _react2.default.createElement(
-          _reactRouterDom.Link,
-          { to: '/chart/hot' },
-          'Hot Posts'
+          'li',
+          null,
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/chart/hot' },
+            'Hot Posts'
+          )
+        ),
+        _react2.default.createElement(
+          'li',
+          null,
+          _react2.default.createElement(
+            'a',
+            { href: 'https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fauth&duration=permanent&scope=identity,history,mysubreddits,read' },
+            'Login'
+          )
         )
       )
     )

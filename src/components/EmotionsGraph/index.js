@@ -25,10 +25,10 @@ class EmotionsGraph extends Component {
   componentDidMount(){
     let queryURL = baseURL + "api";
     const subreddit = this.props.match.params.subredditName;
-    if(subreddit){
+    if(subreddit !== "hot" && subreddit !== "top"){
       queryURL += `/auth/analysis?subreddit=${subreddit}`;
     } else {
-      queryURL += `/gen/hot`;
+      queryURL += `/gen/${subreddit}`;
     }
 
     axios.get(queryURL)

@@ -194,16 +194,47 @@ a:hover {
   padding: 0 50px;
 }
 header {
-  box-shadow: 0 5px 50px 0px hsl(207, 44%, 20%)
+  position: relative;
+  box-shadow: 0 5px 50px 0px hsl(207, 44%, 20%);
+  background: hsl(207, 44%, 40%);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 5;
 }
 
 header h1 {
-  /*text-align: center;*/
   color: whitesmoke;
   margin: 0;
-  padding: 20px;
-  background: hsl(207, 44%, 40%)
-}* {
+}
+
+nav h5 {
+  color: whitesmoke;
+}
+
+nav {
+  display: flex;
+  width: 40vw;
+  min-width: 300px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+nav ul {
+  display: flex;
+  justify-content: space-around;
+}
+
+nav ul li {
+  padding: 0 10px;
+}
+
+nav ul li a {
+  color: whitesmoke;
+}
+
+* {
   margin: 0;
   padding: 0;
 }
