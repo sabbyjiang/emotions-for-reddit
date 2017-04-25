@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 import Router from './Router';
-
+require('../styles/Index.css');
 
 // ReactDOM.render(
 //   <App />,

@@ -1,0 +1,11 @@
+header {
+  box-shadow: 0 5px 50px 0px hsl(207, 44%, 20%)
+}
+
+header h1 {
+  /*text-align: center;*/
+  color: whitesmoke;
+  margin: 0;
+  padding: 20px;
+  background: hsl(207, 44%, 40%)
+}

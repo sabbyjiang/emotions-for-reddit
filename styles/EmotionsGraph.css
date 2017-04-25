@@ -1,7 +1,32 @@
-body {
-  font-family: 'Raleway', sans-serf;
+.post-title {
+  width: 40vw;
+  min-width: 400px;
 }
 
-h1, h2, h3, h4, h5 {
-  font-family: 'Playfair Display', serif;
+.graph-page {
+  margin: 90px 0 0 0;
+  justify-content: space-between;
+}
+
+.graph-titles {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  height: 35px;
+  padding: 0 50px
+}
+
+.graph {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.graph-options-container {
+  display: flex;
+  width: 30vw;
+  min-width: 400px;
+  justify-content: space-between;
+  padding: 0 50px;
 }

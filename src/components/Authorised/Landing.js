@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import {baseURL} from '../../../config';
+require('../../../styles/Landing.css');
 
 class Landing extends Component {
   constructor(){
@@ -32,7 +33,7 @@ class Landing extends Component {
     return this.state.posts.map((post, index) => {
       return (
         <div className="post" key={post.permalink}>
-          <h3><a href={`${post.url}`}>{post.title}</a></h3>
+          <h5><a href={`${post.url}`}>{post.title}</a></h5>
           <ul className="post-info">
             <li>Score: {post.score} </li>
             <li># Comments: <a href={`http://www.reddit.com${post.permalink}`}>{post.num_comments}</a> </li>
@@ -45,9 +46,7 @@ class Landing extends Component {
   createToneButton(){
     return (
       <Link to={`/chart/${this.state.posts[0].subreddit}`}>
-        <div>
-          <p> {`Get Tone Analysis For ${this.state.posts[0].subreddit_name_prefixed}`} </p>
-        </div>
+        <h2> {`Get Tone Analysis For ${this.state.posts[0].subreddit_name_prefixed}`} </h2>
       </Link>
     )
   }
@@ -79,23 +78,29 @@ class Landing extends Component {
   render(){
     if(!this.state.subreddits.length){
       return(
-        <div className="alert center">
-          <h1> Grabbing Your Subreddits </h1>
+        <div className="center window">
+          <div className="alert">
+            <h2> Grabbing Your Data... </h2>
+          </div>
         </div>
       )
     } else {
       return (
-        <div>
+        <div className="App landing">
           <div className="subreddits">
-            <h1> Click on a Subreddit to See The Current Posts </h1>
-            <form onSubmit={(e) => this.props.submitSR(e)}>
+            <h2> Click on a Subreddit to See The Current Posts </h2>
+            <form className="subreddit-form" onSubmit={(e) => this.props.submitSR(e)}>
+              <label className="absolute-top">
+                <input type="submit" value="Get Tones For Subreddits" />
+              </label>
               {this.createSubredditList()}
-              <input type="submit" value="Get Tones For Subreddits" />
             </form>
           </div>
-          <div>
+          <div className="posts-container">
             {this.state.posts.length ? this.createToneButton() : null}
-            {this.state.posts.length ? this.createPostList() : null }
+            <div className="posts">
+              {this.state.posts.length ? this.createPostList() : null }
+            </div>
           </div>
         </div>
       );
