@@ -33048,8 +33048,8 @@ module.exports = canDefineProperty;
 "use strict";
 
 
-var baseURL = "https://reddit-emotions.herokuapp.com/";
-// const baseURL = "http://localhost:8080/";
+// const baseURL = "https://reddit-emotions.herokuapp.com/";
+var baseURL = "http://localhost:8080/";
 
 module.exports = { baseURL: baseURL };
 
@@ -44746,12 +44746,6 @@ var App = function (_Component) {
 
   _createClass(App, [{
     key: 'render',
-
-    // constructor(){
-    //   super();
-    //   this.state = {
-    //   }
-    // }
     value: function render() {
       return _react2.default.createElement(
         'div',
@@ -70072,12 +70066,26 @@ var Header = function Header() {
         'ul',
         null,
         _react2.default.createElement(
+          'h5',
+          null,
+          'Nav:'
+        ),
+        _react2.default.createElement(
           'li',
           null,
           _react2.default.createElement(
             _reactRouterDom.Link,
             { to: '/home' },
             'Home'
+          )
+        ),
+        _react2.default.createElement(
+          'li',
+          null,
+          _react2.default.createElement(
+            'a',
+            { href: '/api/auth/logout' },
+            'Log Out '
           )
         ),
         _react2.default.createElement(

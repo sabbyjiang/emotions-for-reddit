@@ -4,11 +4,6 @@ require('../../styles/App.css');
 import {baseURL} from '../../config/';
 
 class App extends Component {
-  // constructor(){
-  //   super();
-  //   this.state = {
-  //   }
-  // }
   render(){
     return (
       <div className="App">
