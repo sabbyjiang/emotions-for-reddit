@@ -11,7 +11,7 @@ class Legend extends Component {
   }
 
   makeKeys(datum, i){
-    // console.log(this.props.colours[i]);
+    
     // Colour has to be the reverse since the key maps are also reversed!
     return (
       <Key  datum={datum} 
@@ -23,7 +23,10 @@ class Legend extends Component {
   }
   render(){
     return (
-      <g fontFamily="'Raleway', sans-serif" fontSize="10" textAnchor="end">
+      <g  fontFamily="'Raleway', sans-serif" 
+          fontSize="10" 
+          textAnchor="end"
+          >
         {this.props.keys.slice().reverse().map(this.makeKeys.bind(this))}
       </g>
     );

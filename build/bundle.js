@@ -33048,8 +33048,8 @@ module.exports = canDefineProperty;
 "use strict";
 
 
-// const baseURL = "https://reddit-emotions.herokuapp.com/";
-var baseURL = "http://localhost:8080/";
+var baseURL = "https://reddit-emotions.herokuapp.com/";
+// const baseURL = "http://localhost:8080/";
 
 module.exports = { baseURL: baseURL };
 
@@ -69336,7 +69336,7 @@ var Legend = function (_Component) {
   _createClass(Legend, [{
     key: 'makeKeys',
     value: function makeKeys(datum, i) {
-      // console.log(this.props.colours[i]);
+
       // Colour has to be the reverse since the key maps are also reversed!
       return _react2.default.createElement(_Key2.default, _extends({ datum: datum,
         index: i,
@@ -69349,7 +69349,10 @@ var Legend = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         'g',
-        { fontFamily: '\'Raleway\', sans-serif', fontSize: '10', textAnchor: 'end' },
+        { fontFamily: '\'Raleway\', sans-serif',
+          fontSize: '10',
+          textAnchor: 'end'
+        },
         this.props.keys.slice().reverse().map(this.makeKeys.bind(this))
       );
     }
