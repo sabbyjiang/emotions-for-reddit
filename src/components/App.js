@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 require('../../styles/App.css');
+import {baseURL} from '../../config/';
 
 class App extends Component {
   // constructor(){
@@ -16,7 +17,7 @@ class App extends Component {
           <p> Or log in to see data from your own subreddits </p>
           <p> More features coming soon </p>
           <p className="text-c">
-            <a href="https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=https://reddit-emotions.herokuapp.com/api/auth/&duration=permanent&scope=identity,history,mysubreddits,read">Login</a>
+            <a href={`https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=${baseURL}api/auth/&duration=permanent&scope=identity,history,mysubreddits,read`}>Login</a>
           </p>
         </div>
       </div>
