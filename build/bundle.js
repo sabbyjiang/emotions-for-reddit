@@ -70083,15 +70083,6 @@ var Header = function Header() {
             { href: 'https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=https://reddit-emotions.herokuapp.com/api/auth/&duration=permanent&scope=identity,history,mysubreddits,read' },
             'Login'
           )
-        ),
-        _react2.default.createElement(
-          'li',
-          null,
-          _react2.default.createElement(
-            'a',
-            { href: '/api/auth/logout' },
-            'Log Out '
-          )
         )
       )
     )
