@@ -68413,6 +68413,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(3);
@@ -68479,12 +68481,13 @@ var Authorised = function (_Component) {
     value: function whichComponent() {
       switch (this.state.show) {
         case "Landing":
-          return _react2.default.createElement(_Landing2.default, { selectSR: this.setSelectedSubreddits.bind(this),
+          return _react2.default.createElement(_Landing2.default, _extends({ selectSR: this.setSelectedSubreddits.bind(this),
             selected: this.state.selectedSubreddits,
-            submitSR: this.submitSR.bind(this) });
+            submitSR: this.submitSR.bind(this)
+          }, this.props));
           break;
         case "Radar":
-          return _react2.default.createElement(_Radar2.default, { subreddits: this.state.selectedSubreddits });
+          return _react2.default.createElement(_Radar2.default, _extends({ subreddits: this.state.selectedSubreddits }, this.props));
           break;
       }
     }
@@ -68557,8 +68560,15 @@ var Landing = function (_Component) {
       var _this2 = this;
 
       _axios2.default.get(_config.baseURL + 'api/auth/get-subscriptions').then(function (response) {
-        var data = response.data;
-        _this2.setState({ subreddits: data });
+        if (response.data.error) {
+          alert(response.data.error);
+          if (response.data.error === "Not logged in yet!") {
+            _this2.props.history.push('/');
+          }
+        } else {
+          var data = response.data;
+          _this2.setState({ subreddits: data });
+        }
       });
     }
   }, {

@@ -17,8 +17,15 @@ class Landing extends Component {
   componentDidMount(){
     Axios.get(baseURL + 'api/auth/get-subscriptions')
       .then(response => {
-        const data = response.data;
-        this.setState({subreddits: data});
+        if(response.data.error){
+          alert(response.data.error);
+          if(response.data.error === "Not logged in yet!"){
+            this.props.history.push('/');
+          }
+        } else {
+          const data = response.data;
+          this.setState({subreddits: data});
+        }
       })
   }
 
