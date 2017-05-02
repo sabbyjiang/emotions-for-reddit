@@ -39,11 +39,12 @@ class Authorised extends Component {
         return (
           <Landing  selectSR={this.setSelectedSubreddits.bind(this)} 
                     selected={this.state.selectedSubreddits}
-                    submitSR={this.submitSR.bind(this)}/>
+                    submitSR={this.submitSR.bind(this)}
+                    {...this.props}/>
         );
         break;
       case "Radar":
-        return < Radar subreddits={this.state.selectedSubreddits}/>;
+        return < Radar subreddits={this.state.selectedSubreddits} {...this.props}/>;
         break;
     }
   }

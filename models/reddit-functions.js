@@ -4,9 +4,11 @@ const snoowrap = require('snoowrap'),
       axios = require('axios');
 
 const getSnoowrap = (req, res, next) => {
+  // Need to change this in order to allow access to some pages without access but redirect depending on the request
   const refresh = req.cookies.refresh;
   if(!refresh){
-    res.redirect('/');
+    req.error = 'Not logged in yet!';
+    next();
   } else {
     const r = new snoowrap({
       userAgent: process.env.USER_AGENT,
@@ -21,32 +23,49 @@ const getSnoowrap = (req, res, next) => {
   }
 }
 
+// Gets the subscriptions of the current user who logged in
+// If there is no user, move on to the next step
 const getSubscriptions = (req, res, next) => {
-    console.log('-----------------------')
-console.log('attempting reddit query');
-  console.log('req.r:', req.r);
-  req.r.getSubscriptions({limit: 100})
-    .then(listing => {
-      console.log("here is the listing:", listing);
-      console.log('listing.length:', listing.length);
-      req.listing = listing;
-      next();
-    })
-    .catch(err => console.log(err));
+  // if there was a previous error, move on to the next thing
+  if(req.error){
+    next();
+  } else {
+    req.r.getSubscriptions({limit: 100})
+      .then(listing => {
+        // If it is an empty listing, then report error as no subscriptions found, otherwise, return the listing
+        if(!listing.length){
+          req.error = 'No subscriptions found';
+          next();
+        } else {
+          req.listing = listing;
+          next();
+        }
+      })
+      .catch(err => console.log(err));
+  }
 }
 
-
+// Gets the posts of the subreddit in question from the query
+// If there already is an error, move on
 const getSubredditPosts = (req, res, next) => {
-  
-  req.r.getSubreddit(req.query.subreddit).getHot()
-    .then(listing => {
-      
-      req.listing = listing;
-      next();
-    })
-    .catch(err => console.log(err));
+  if(req.error){
+    next();
+  } else {
+    req.r.getSubreddit(req.query.subreddit).getHot()
+      .then(listing => {
+        if(!listing.length){
+          req.error = 'No posts found';
+          next();
+        } else {
+          req.listing = listing;
+          next();
+        }
+      })
+      .catch(err => console.log(err));
+  }
 }
 
+// function in order return a mass promised posts from the subreddits
 const massSubreddit = (srArray, snoowrap) => {
   return srArray.map(sr => {
     return snoowrap.getSubreddit(sr).getHot({limit: 25})
@@ -54,29 +73,42 @@ const massSubreddit = (srArray, snoowrap) => {
   });
 }
 
+// gets the top 25 posts from the subreddits the posted data and sends it to the next function
 const getMassSubredditPosts = (req, res, next) => {
-  const srRaw = req.query.subreddits;
-  const srArray = srRaw.split(',');
-  Promise.all(massSubreddit(srArray, req.r))
-    .then(results => {
-      const extracted = results.map(sr => {
-        return extractData(sr);
+  if(req.error){
+    next();
+  } else {
+    const srArray = req.body.subreddits;
+    Promise.all(massSubreddit(srArray, req.r))
+      .then(results => {
+        const extracted = results.map(extractData);
+        req.rawReddit = extracted;
+        next();
       })
-      req.rawReddit = extracted;
-      next();
-    })
-    .catch(err => {
-      console.log(err);
-    });
+      .catch(err => {
+        req.error = "Failed to retreive subreddits";
+        console.log(err);
+        next();
+      });
+  }
 }
 
 const getHotForRadar = (req, res, next) => {
-  req.r.getHot({amount: 25})
-    .then(results => {
-      const extracted = extractData(results);
-      req.rawDataWithHot = req.rawReddit.concat([extracted]);
-      next();
-    })
+  if(req.error){
+    next();
+  } else {
+    req.r.getHot({amount: 25})
+      .then(results => {
+        if(!results.length){
+          req.error = "Could not retrieve data from Reddit";
+          next();
+        } else {
+          const extracted = extractData(results);
+          req.rawDataWithHot = req.rawReddit.concat([extracted]);
+          next();
+        }
+      })
+  }
 }
 
 const cleanRedditData = (req, res, next) => {
@@ -100,27 +132,41 @@ const extractData = (response) => {
   });
 }
 
+// Gets the current hot posts from reddit and sends them to the next function
 const redditHot = (req, res, next) => {
   r.getHot({amount: numPosts})
     .then(response => {
-      const extractedData = extractData(response);
-      req.redditData = extractedData;
-      next();
+      if(!response.length){
+        req.error = "Unable to get redddit posts";
+        next();
+      } else {
+        const extractedData = extractData(response);
+        req.redditData = extractedData;
+        next();
+      }
     })
     .catch(err => {
-      res.json({err: "error in getHot"});
+      req.error = "Unable to access reddit";
+      next();
     })
 }
 
+// Gets the top posts of the last 24 hours
 const redditTop = (req, res, next) => {
   r.getTop({time: 'day', amount: numPosts})
     .then(response => {
-      const extractedData = extractData(response);
-      req.redditData = extractedData;
-      next();
+      if(!response.length){
+        req.error = "Unable to get redddit posts";
+        next();
+      } else {
+        const extractedData = extractData(response);
+        req.redditData = extractedData;
+        next();
+      }
     })
     .catch(err => {
-      res.json({err});
+      req.error = "Unable to access reddit";
+      next();
     })
 }
 
@@ -133,9 +179,7 @@ const getAuth = (req, res, next) => {
     "https://www.reddit.com/api/v1/access_token", 
     {
       method: 'POST', 
-      // data: {grant_type: 'authorization_code', code: code, 'redirect-uri': process.env.REDIRECT},
       data: 'grant_type=authorization_code&code=' + code + '&redirect_uri=' + process.env.REDIRECT,
-      // data: 'grant_type=authorization_code&code=' + code,
       headers: {
         "Authorization": auth
       }
@@ -147,25 +191,4 @@ const getAuth = (req, res, next) => {
     .catch(err => {console.log("err", err)});
 }
 
-const refreshToken = (req, res, next) => {
-  const token = req.cookies.refresh;
-
-  const auth = "Basic " + new Buffer(process.env.REDDIT_CLIENT_ID + ':' + process.env.REDDIT_SECRET).toString('base64');
-
-  axios(
-    "https://www.reddit.com/api/v1/access_token", 
-    {
-      method: 'POST', 
-      data: 'grant_type=refresh_token&refresh_token=' + token,
-      headers: {
-        "Authorization": auth
-      }
-    })
-    .then(results => {
-      req.reddit = results.data;
-      next();
-    })
-    .catch(err => {console.log("err", err)});
-}
-
-module.exports = {redditHot, redditTop, getAuth, refreshToken, getSnoowrap, getSubscriptions, getSubredditPosts, cleanRedditData, getMassSubredditPosts, getHotForRadar};
+module.exports = {redditHot, redditTop, getAuth, getSnoowrap, getSubscriptions, getSubredditPosts, cleanRedditData, getMassSubredditPosts, getHotForRadar};

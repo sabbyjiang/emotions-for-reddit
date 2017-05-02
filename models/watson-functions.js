@@ -36,37 +36,58 @@ const mergeData = (reddit, watson) => {
 }
 
 const getTone = (req, res, next) => {
-  const redditData = req.redditData;
-  Promise.all(toneMap(redditData))
-    .then(results => {
-      req.watsonData = results;
-      next();
-    })
-    .catch(err => {
-      res.json({err: "error in getTone"});
-    })
+  if(req.error){
+    next();
+  } else {
+    const redditData = req.redditData;
+    Promise.all(toneMap(redditData))
+      .then(results => {
+        req.watsonData = results;
+        next();
+      })
+      .catch(err => {
+        req.error = "Error in tone analysis";
+        next();
+      })
+  }
 }
 
 const getToneIndSub = (req, res, next) => {
-  const redditData = req.listing;
-  const wholePageDoc = redditData.reduce((document, post) => {
-    return document + post.title;
-  }, "");
+  if(req.error){
+    next();
+  } else {
+    const redditData = req.listing;
+    const wholePageDoc = redditData.reduce((document, post) => {
+      return document + post.title;
+    }, "");
 
-  promiseTone({text: wholePageDoc})
-    .then(results => {
-      req.results = results;
-      next();
-    });
+    promiseTone({text: wholePageDoc})
+      .then(results => {
+        req.results = results;
+        next();
+      })
+      .catch(err => {
+        req.error = "Error in tone analysis";
+        next();
+      });
+  }
 }
 
 const getToneMassSub = (req, res, next) => {
-  const redditData = req.redditForWatson;
-  Promise.all(srMap(redditData))
-    .then(results => {
-      req.results = results;
-      next();
-    })
+  if(req.error){
+    next();
+  } else {
+    const redditData = req.redditForWatson;
+    Promise.all(srMap(redditData))
+      .then(results => {
+        req.results = results;
+        next();
+      })
+      .catch(err => {
+        req.error = "Error in tone analysis";
+        next();
+      });
+  }
 }
 
 module.exports = {getTone, getToneIndSub, getToneMassSub}
