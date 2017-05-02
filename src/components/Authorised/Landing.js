@@ -17,6 +17,7 @@ class Landing extends Component {
   componentDidMount(){
     Axios.get(baseURL + 'api/auth/get-subscriptions')
       .then(response => {
+        console.log(response);
         const data = response.data;
         this.setState({subreddits: data});
       })

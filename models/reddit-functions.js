@@ -22,18 +22,25 @@ const getSnoowrap = (req, res, next) => {
 }
 
 const getSubscriptions = (req, res, next) => {
-
+    console.log('-----------------------')
+console.log('attempting reddit query');
+  console.log('req.r:', req.r);
   req.r.getSubscriptions({limit: 100})
     .then(listing => {
+      console.log("here is the listing:", listing);
+      console.log('listing.length:', listing.length);
       req.listing = listing;
       next();
-    })  
+    })
+    .catch(err => console.log(err));
 }
 
 
 const getSubredditPosts = (req, res, next) => {
+  
   req.r.getSubreddit(req.query.subreddit).getHot()
     .then(listing => {
+      
       req.listing = listing;
       next();
     })

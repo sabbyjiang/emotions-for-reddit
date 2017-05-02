@@ -33048,8 +33048,8 @@ module.exports = canDefineProperty;
 "use strict";
 
 
-var baseURL = "https://reddit-emotions.herokuapp.com/";
-// const baseURL = "http://localhost:8080/";
+// const baseURL = "https://reddit-emotions.herokuapp.com/";
+var baseURL = "http://localhost:8080/";
 
 module.exports = { baseURL: baseURL };
 
@@ -68557,6 +68557,7 @@ var Landing = function (_Component) {
       var _this2 = this;
 
       _axios2.default.get(_config.baseURL + 'api/auth/get-subscriptions').then(function (response) {
+        console.log(response);
         var data = response.data;
         _this2.setState({ subreddits: data });
       });
