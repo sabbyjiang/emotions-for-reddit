@@ -18,10 +18,11 @@ class RadarChart extends Component {
 
   componentDidMount(){
     const srString = this.props.subreddits.join(',');
-    Axios.get(baseURL + 'api/auth/radar', {
-      params: {
-        subreddits: srString}
-      })
+    // Axios.get(baseURL + 'api/auth/radar', {
+    //   params: {
+    //     subreddits: srString}
+    //   })
+    Axios.post(baseURL + 'api/auth/radar', {subreddits: this.props.subreddits})
       .then(r => {
         this.setState({data: r.data, currentData: r.data[0]});
       })

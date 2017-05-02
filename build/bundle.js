@@ -68557,7 +68557,6 @@ var Landing = function (_Component) {
       var _this2 = this;
 
       _axios2.default.get(_config.baseURL + 'api/auth/get-subscriptions').then(function (response) {
-        console.log(response);
         var data = response.data;
         _this2.setState({ subreddits: data });
       });
@@ -68898,10 +68897,11 @@ var RadarChart = function (_Component) {
       var _this2 = this;
 
       var srString = this.props.subreddits.join(',');
-      _axios2.default.get(_config.baseURL + 'api/auth/radar', {
-        params: {
-          subreddits: srString }
-      }).then(function (r) {
+      // Axios.get(baseURL + 'api/auth/radar', {
+      //   params: {
+      //     subreddits: srString}
+      //   })
+      _axios2.default.post(_config.baseURL + 'api/auth/radar', { subreddits: this.props.subreddits }).then(function (r) {
         _this2.setState({ data: r.data, currentData: r.data[0] });
       }).catch(function (err) {
         return console.log(err);
