@@ -13,14 +13,7 @@ router.post('/radar', getSnoowrap, getMassSubredditPosts, getHotForRadar, cleanS
     const results = req.cleaned;
     res.json(results);
   }
-})
-
-// router.get('/refresh', refreshToken, (req, res) => {
-//   const reddit = req.reddit;
-//   res.cookie('access', reddit.access_token);
-//   res.json('success');
-// });
-
+});
 
 router.get('/get-subscriptions', getSnoowrap, getSubscriptions, (req, res) => {
   if(req.error){

@@ -7,13 +7,23 @@ const {cleanData} = require('../../models/gen-functions');
 router.get('/hot', 
   redditHot, getTone, cleanData, 
   (req, res) => {
-    const results = req.results;
-    res.json(results);
+    if(req.error){
+      const error = req.error;
+      res.json({error});
+    } else {
+      const results = req.results;
+      res.json(results);
+    }
 });
 
 router.get('/top', redditTop, getTone, cleanData, (req, res) => {
-  const results = req.results;
-  res.json(results);
+  if(req.error){
+      const error = req.error;
+      res.json({error});
+    } else {
+      const results = req.results;
+      res.json(results);
+    }
 });
 
 module.exports = router;

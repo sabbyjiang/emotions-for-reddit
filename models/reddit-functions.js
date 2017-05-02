@@ -73,30 +73,42 @@ const massSubreddit = (srArray, snoowrap) => {
   });
 }
 
-// gets the subreddits from the query
+// gets the top 25 posts from the subreddits the posted data and sends it to the next function
 const getMassSubredditPosts = (req, res, next) => {
-  // Change this to req.body and then url to a post request
-  const srArray = req.body.subreddits;
-  Promise.all(massSubreddit(srArray, req.r))
-    .then(results => {
-      const extracted = results.map(sr => {
-        return extractData(sr);
+  if(req.error){
+    next();
+  } else {
+    const srArray = req.body.subreddits;
+    Promise.all(massSubreddit(srArray, req.r))
+      .then(results => {
+        const extracted = results.map(extractData);
+        req.rawReddit = extracted;
+        next();
       })
-      req.rawReddit = extracted;
-      next();
-    })
-    .catch(err => {
-      console.log(err);
-    });
+      .catch(err => {
+        req.error = "Failed to retreive subreddits";
+        console.log(err);
+        next();
+      });
+  }
 }
 
 const getHotForRadar = (req, res, next) => {
-  req.r.getHot({amount: 25})
-    .then(results => {
-      const extracted = extractData(results);
-      req.rawDataWithHot = req.rawReddit.concat([extracted]);
-      next();
-    })
+  if(req.error){
+    next();
+  } else {
+    req.r.getHot({amount: 25})
+      .then(results => {
+        if(!results.length){
+          req.error = "Could not retrieve data from Reddit";
+          next();
+        } else {
+          const extracted = extractData(results);
+          req.rawDataWithHot = req.rawReddit.concat([extracted]);
+          next();
+        }
+      })
+  }
 }
 
 const cleanRedditData = (req, res, next) => {
@@ -120,27 +132,41 @@ const extractData = (response) => {
   });
 }
 
+// Gets the current hot posts from reddit and sends them to the next function
 const redditHot = (req, res, next) => {
   r.getHot({amount: numPosts})
     .then(response => {
-      const extractedData = extractData(response);
-      req.redditData = extractedData;
-      next();
+      if(!response.length){
+        req.error = "Unable to get redddit posts";
+        next();
+      } else {
+        const extractedData = extractData(response);
+        req.redditData = extractedData;
+        next();
+      }
     })
     .catch(err => {
-      res.json({err: "error in getHot"});
+      req.error = "Unable to access reddit";
+      next();
     })
 }
 
+// Gets the top posts of the last 24 hours
 const redditTop = (req, res, next) => {
   r.getTop({time: 'day', amount: numPosts})
     .then(response => {
-      const extractedData = extractData(response);
-      req.redditData = extractedData;
-      next();
+      if(!response.length){
+        req.error = "Unable to get redddit posts";
+        next();
+      } else {
+        const extractedData = extractData(response);
+        req.redditData = extractedData;
+        next();
+      }
     })
     .catch(err => {
-      res.json({err});
+      req.error = "Unable to access reddit";
+      next();
     })
 }
 
@@ -165,25 +191,4 @@ const getAuth = (req, res, next) => {
     .catch(err => {console.log("err", err)});
 }
 
-const refreshToken = (req, res, next) => {
-  const token = req.cookies.refresh;
-
-  const auth = "Basic " + new Buffer(process.env.REDDIT_CLIENT_ID + ':' + process.env.REDDIT_SECRET).toString('base64');
-
-  axios(
-    "https://www.reddit.com/api/v1/access_token", 
-    {
-      method: 'POST', 
-      data: 'grant_type=refresh_token&refresh_token=' + token,
-      headers: {
-        "Authorization": auth
-      }
-    })
-    .then(results => {
-      req.reddit = results.data;
-      next();
-    })
-    .catch(err => {console.log("err", err)});
-}
-
-module.exports = {redditHot, redditTop, getAuth, refreshToken, getSnoowrap, getSubscriptions, getSubredditPosts, cleanRedditData, getMassSubredditPosts, getHotForRadar};
+module.exports = {redditHot, redditTop, getAuth, getSnoowrap, getSubscriptions, getSubredditPosts, cleanRedditData, getMassSubredditPosts, getHotForRadar};

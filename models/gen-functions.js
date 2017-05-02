@@ -1,33 +1,3 @@
-// Takes the cookies string from the request header and returns object with cookies in key-pair value
-
-// const data = require('../db/hot/2017-04-22-18-17.js')
-// const results = require('../db/sub-testing/2017-04-24-14-40.js');
-// const cookieParse = (req, res, next) => {
-//   // Only gets cookies if there are cookies
-//   if(req.headers.cookie){
-//     const cookiesParsed = {};
-//     const headerCookie = req.headers.cookie;
-
-//     // Splits the string into an array of cookies (still in string format)
-//     const rawArray = headerCookie.split('; ');
-
-//     // each cookie string is split by key-pair value
-//     const cleaned = rawArray.map(cookie => {
-//       return cookie.split('=');
-//     });
-
-//     // Puts the key-pair value into the object
-//     cleaned.forEach(cookie => {
-//       cookiesParsed[cookie[0]] = cookie[1];
-//     });
-
-//     // Returns the object
-//     req.cookies = cookiesParsed;
-//   } 
-  
-//   next();
-// }
-
 const cleanData = (req, res, next) => {
   // const redditData = data[0];
   // const watsonData = data[1];
@@ -86,7 +56,7 @@ const cleanSRArrayForWatson = (req, res, next) => {
 const cleanForRadar = (req, res, next) => {
   // Change to post request and req.body
   const srArray = req.body.subreddits;
-  srArray.push('front-page');
+  srArray.push('frontpage');
 
   const results = req.results;
   
