@@ -1,10 +1,9 @@
 const cleanData = (req, res, next) => {
-  // const redditData = data[0];
-  // const watsonData = data[1];
 
   const redditData = req.redditData;
   const watsonData = req.watsonData;
 
+  // Creates a copy of the passed redditData (has to be down to primitive types)
   const createCopy = (newArr, post) => {
     const title = post.title, 
           subreddit = post.subreddit, 
@@ -26,6 +25,7 @@ const cleanData = (req, res, next) => {
       // This is an array of tone cateogries
       let targetWatson = watsonData[postIndex].document_tone.tone_categories;
 
+      // Watson data is organized by categories nested inside posts but D3 needs posts nested inside categories
       post["tone_category"] = targetWatson[categoryIndex].category_id;
 
       post["tones"] = targetWatson[categoryIndex].tones;
