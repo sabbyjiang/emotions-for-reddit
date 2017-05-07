@@ -3857,8 +3857,8 @@ module.exports = React;
 "use strict";
 
 
-// const baseURL = "https://reddit-emotions.herokuapp.com/";
-var baseURL = "http://localhost:8080/";
+var baseURL = "https://reddit-emotions.herokuapp.com/";
+// const baseURL = "http://localhost:8080/";
 
 module.exports = { baseURL: baseURL };
 
@@ -44774,7 +44774,7 @@ var App = function (_Component) {
             _react2.default.createElement(
               'a',
               { href: 'https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=' + _config.baseURL + 'api/auth/&duration=permanent&scope=identity,history,mysubreddits,read' },
-              'Login'
+              'Login via Reddit'
             )
           )
         )
