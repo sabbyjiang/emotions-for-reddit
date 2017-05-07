@@ -12,7 +12,7 @@ class App extends Component {
           <p> Or log in to see data from your own subreddits </p>
           <p> More features coming soon </p>
           <p className="text-c">
-            <a href={`https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=${baseURL}api/auth/&duration=permanent&scope=identity,history,mysubreddits,read`}>Login</a>
+            <a href={`https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=${baseURL}api/auth/&duration=permanent&scope=identity,history,mysubreddits,read`}>Login via Reddit</a>
           </p>
         </div>
       </div>
