@@ -9,7 +9,7 @@ const express = require('express'),
 
 app.use(logger('dev'));
 
-app.use(express.static('build'));
+app.use(express.static('dist'));
 app.use(require('./router'));
 
 app.listen(PORT, () => {
