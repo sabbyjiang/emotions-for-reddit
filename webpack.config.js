@@ -3,6 +3,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractCSS = new ExtractTextPlugin({
     filename: 'style.css'
 });
+const extractSCSS = new ExtractTextPlugin({
+    filename: 'main.css'
+})
 
 const config = {
     entry: [
@@ -23,11 +26,18 @@ const config = {
                     use: 'css-loader'
                 }),
                 test: /\.css$/
+            },
+            {
+                test: /\.scss$/,
+                use: extractSCSS.extract({
+                    use: ['css-loader', 'sass-loader']
+                })
             }
         ]
     },
     plugins: [
         extractCSS,
+        extractSCSS
     ]
 }
 
