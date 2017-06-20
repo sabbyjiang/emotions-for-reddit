@@ -57,7 +57,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "dist";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 201);
@@ -4423,8 +4423,8 @@ module.exports = ReactInstanceMap;
 "use strict";
 
 
-var baseURL = "https://reddit-emotions.herokuapp.com/";
-// const baseURL = "http://localhost:8080/";
+// const baseURL = "https://reddit-emotions.herokuapp.com/";
+var baseURL = "http://localhost:8080/";
 
 module.exports = { baseURL: baseURL };
 
@@ -59678,8 +59678,7 @@ exports.default = _react2.default.createElement(
         _react2.default.createElement(_Header2.default, null),
         _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _App2.default }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/home', component: _Authorised2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/chart/:subredditName', component: _EmotionsGraph2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/testing', component: _Radar2.default })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/chart/:subredditName', component: _EmotionsGraph2.default })
     )
 );
 
