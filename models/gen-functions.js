@@ -1,24 +1,18 @@
+// In order to make copies of the reddit data
+const deepcopy = require("deepcopy");
+
 const cleanData = (req, res, next) => {
 
   const redditData = req.redditData;
   const watsonData = req.watsonData;
 
-  // Creates a copy of the passed redditData (has to be down to primitive types)
-  const createCopy = (newArr, post) => {
-    const title = post.title, 
-          subreddit = post.subreddit, 
-          permalink = post.permalink, 
-          score = post.score, 
-          over_18 = post.over_18;
+  let allTones = [];
 
-    return newArr.concat({title, subreddit, permalink, score, over_18});
+  const numberOfTones = watsonData[0].document_tone.tone_categories.length;
+
+  for( i = 0 ; i < numberOfTones ; i++){
+    allTones.push(deepcopy(redditData));
   }
-
-  let emotionalTone = redditData.reduce(createCopy, []);
-  let languageTone = redditData.reduce(createCopy, []);
-  let socialTone = redditData.reduce(createCopy, []);
-
-  let allTones = [emotionalTone, languageTone, socialTone];
 
   allTones.forEach((category, categoryIndex) => {
     category.forEach((post, postIndex) => {
@@ -33,8 +27,8 @@ const cleanData = (req, res, next) => {
       targetWatson[categoryIndex].tones.forEach(tone => {
         post[tone.tone_name] = tone.score;
       });
-    })
-  })
+    });
+  });
 
   req.results = allTones;
 

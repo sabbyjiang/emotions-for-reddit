@@ -14,7 +14,6 @@ export default (
             {/* exact makes it so that going to projects doesn't also load home2*/}
             <Route path="/home" component={Authorised} />
             <Route path="/chart/:subredditName" component={EmotionsGraph} />
-            <Route path="/testing" component={RadarChart} />
         </div>
     </BrowserRouter>
 )

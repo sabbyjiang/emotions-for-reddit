@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 router.use('/api', bodyParser.json(), bodyParser.urlencoded({extended: true}), cookieParser(), controller);
 
 router.get('*', (req, res) => {
-  res.sendfile(path.join(__dirname + '/index.html'));
+  res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 module.exports = router;
