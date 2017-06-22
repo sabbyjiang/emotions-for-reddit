@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 require('../../styles/App.css');
-import {baseURL} from '../../config/';
+import { baseURL } from '../../config/';
+import { connect } from 'react-redux';
 
 class App extends Component {
   render(){
@@ -19,5 +20,7 @@ class App extends Component {
     );
   }
 }
+
+
 
 export default App;
