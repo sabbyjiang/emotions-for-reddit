@@ -2,6 +2,7 @@
 const deepcopy = require("deepcopy");
 
 const cleanData = (req, res, next) => {
+  console.log("bitches");
 
   const redditData = req.redditData;
   const watsonData = req.watsonData;

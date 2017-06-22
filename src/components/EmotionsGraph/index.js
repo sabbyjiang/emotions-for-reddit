@@ -5,7 +5,7 @@ import axios from 'axios';
 import StackedBar from './StackedBar';
 require('../../../styles/EmotionsGraph.css');
 import Sorting from './Sorting';
-import {baseURL} from '../../../config';
+import { baseURL } from '../../../config';
 
 class EmotionsGraph extends Component {
   constructor(){
