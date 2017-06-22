@@ -1,5 +1,13 @@
 import { baseURL } from '../../config';
 import Axios from 'axios';
+import { nest, ascending } from 'd3';
+
+const sortBy = (elA, elB, property) => {
+  let a = elA[property].decapitalize(),
+      b = elB[property].decapitalize();
+
+  return (a < b) ? -1 : (a > b) ? 1 : 0;
+}
 
 export function setSubreddits(){
   return dispatch => {
@@ -7,7 +15,7 @@ export function setSubreddits(){
         .then(response => {
           dispatch({
             type: "SET_USER_SUBREDDITS",
-            payload: response.data
+            payload: response.data.sort((a, b) => sortBy(a, b, "display_name"))
           })
         });
   };

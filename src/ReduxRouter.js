@@ -5,12 +5,11 @@ import store from './store';
 import { Provider } from 'react-redux';
 
 // Route Components
-import App from './components/App';
-import Authorised from './components/Authorised';
+import App from './containers/App';
+import Landing from './containers/Landing';
+import Radar from './containers/Radar';
 import EmotionsGraph from './components/EmotionsGraph';
-import Header from './components/Header';
-import RadarChart from './components/Authorised/Radar';
-// import Test from './testRedux';
+import Header from './containers/Header';
 
 export default (
   <Provider store={ store } >
@@ -18,9 +17,9 @@ export default (
       <div className="body">
         <Header />
         <Route exact path="/" component={ App } />
-        <Route path="/home" component={ Authorised } />
+        <Route path="/home" component={ Landing } />
+        <Route path="/radar" component={ Radar } />
         <Route path="/chart/:subredditName" component={ EmotionsGraph } />
-        {/*<Route path="/test" component={ Test } />*/}
       </div>
     </BrowserRouter>
   </Provider>

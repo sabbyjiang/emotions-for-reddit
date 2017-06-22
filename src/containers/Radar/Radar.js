@@ -4,9 +4,9 @@ import Radar from 'react-d3-radar';
 import Axios from 'axios';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { baseURL } from '../../../../config';
+import { baseURL } from '../../../config';
 import Legend from './Legend';
-require('../../../../styles/Radar.css');
+require('../../../styles/Radar.css');
 
 class RadarChart extends Component {
   constructor(){

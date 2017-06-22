@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import { setSubreddits, setPosts, addSelectedSR, removeSelectedSR } from '../../actions/userActions';
+import { setSubreddits, setPosts, addSelectedSR, removeSelectedSR } from '../actions/userActions';
 // import {baseURL} from '../../../config';
-require('../../../styles/Landing.css');
+require('../../styles/Landing.css');
 
 class Landing extends Component {
   constructor(){
@@ -67,6 +67,11 @@ class Landing extends Component {
     });
   }
 
+  goToRadar(e){
+    e.preventDefault();
+    this.props.history.push('/radar');
+  }
+
   render(){
     if(!this.props.subreddits.length){
       return(
@@ -81,7 +86,7 @@ class Landing extends Component {
         <div className="App landing">
           <div className="subreddits">
             <h2> Click on a Subreddit to See The Current Posts </h2>
-            <form className="subreddit-form" onSubmit={(e) => this.props.submitSR(e)}>
+            <form className="subreddit-form" onSubmit={(e) => this.goToRadar(e)}>
               <label className="absolute-top">
                 <input type="submit" value="Get Tones For Subreddits" />
               </label>
