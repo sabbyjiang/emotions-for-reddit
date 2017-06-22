@@ -30,11 +30,19 @@ const userReducer = (state = {
             let indexToRemove = state.selectedSubreddits.indexOf(action.payload);
             let newSelection = [...state.selectedSubreddits];
             newSelection.splice(indexToRemove, 1);
-            console.log("new array", newSelection);
             state = {
                 ...state,
                 selectedSubreddits: newSelection
             }
+            break;
+        case "CLEAR_SELECTED_SR":
+            state = {
+                ...state,
+                selectedSubreddits: action.payload
+            }
+            break;
+        default: 
+            return state;
     }
     return state;
 };

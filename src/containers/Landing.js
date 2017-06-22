@@ -2,20 +2,21 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import { setSubreddits, setPosts, addSelectedSR, removeSelectedSR } from '../actions/userActions';
+import { setSubreddits, setPosts, addSelectedSR, removeSelectedSR, clearSelectedSR } from '../actions/userActions';
 // import {baseURL} from '../../../config';
 require('../../styles/Landing.css');
 
 class Landing extends Component {
   constructor(){
     super();
-    this.state = {
-      selectedSubreddits: [],
-    }
   }
 
   componentDidMount(){
-    this.props.setSubreddits();
+    if(this.props.subreddits.length !== 0){
+      this.props.clearSelectedSR();
+    } else {
+      this.props.setSubreddits();
+    }
   }
 
   createPostList(){
@@ -126,6 +127,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     removeSR: (subreddit) => {
       dispatch(removeSelectedSR(subreddit));
+    },
+    clearSelectedSR: () => {
+      dispatch(clearSelectedSR());
     }
   };
 };

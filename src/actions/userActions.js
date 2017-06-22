@@ -47,3 +47,10 @@ export function removeSelectedSR(subreddit){
     payload: subreddit
   };
 };
+
+export function clearSelectedSR(){
+  return {
+    type: "CLEAR_SELECTED_SR",
+    payload: []
+  }
+}

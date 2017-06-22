@@ -61354,10 +61354,17 @@ var userReducer = function userReducer() {
             var indexToRemove = state.selectedSubreddits.indexOf(action.payload);
             var newSelection = [].concat(_toConsumableArray(state.selectedSubreddits));
             newSelection.splice(indexToRemove, 1);
-            console.log("new array", newSelection);
             state = _extends({}, state, {
                 selectedSubreddits: newSelection
             });
+            break;
+        case "CLEAR_SELECTED_SR":
+            state = _extends({}, state, {
+                selectedSubreddits: action.payload
+            });
+            break;
+        default:
+            return state;
     }
     return state;
 };
@@ -73404,18 +73411,17 @@ var Landing = function (_Component) {
   function Landing() {
     _classCallCheck(this, Landing);
 
-    var _this = _possibleConstructorReturn(this, (Landing.__proto__ || Object.getPrototypeOf(Landing)).call(this));
-
-    _this.state = {
-      selectedSubreddits: []
-    };
-    return _this;
+    return _possibleConstructorReturn(this, (Landing.__proto__ || Object.getPrototypeOf(Landing)).call(this));
   }
 
   _createClass(Landing, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.props.setSubreddits();
+      if (this.props.subreddits.length !== 0) {
+        this.props.clearSelectedSR();
+      } else {
+        this.props.setSubreddits();
+      }
     }
   }, {
     key: 'createPostList',
@@ -73596,6 +73602,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     removeSR: function removeSR(subreddit) {
       dispatch((0, _userActions.removeSelectedSR)(subreddit));
+    },
+    clearSelectedSR: function clearSelectedSR() {
+      dispatch((0, _userActions.clearSelectedSR)());
     }
   };
 };
@@ -73616,6 +73625,7 @@ exports.setSubreddits = setSubreddits;
 exports.setPosts = setPosts;
 exports.addSelectedSR = addSelectedSR;
 exports.removeSelectedSR = removeSelectedSR;
+exports.clearSelectedSR = clearSelectedSR;
 
 var _config = __webpack_require__(40);
 
@@ -73672,6 +73682,13 @@ function removeSelectedSR(subreddit) {
     payload: subreddit
   };
 };
+
+function clearSelectedSR() {
+  return {
+    type: "CLEAR_SELECTED_SR",
+    payload: []
+  };
+}
 
 /***/ }),
 /* 529 */
