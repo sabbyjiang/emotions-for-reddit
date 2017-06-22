@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import Radar from 'react-d3-radar';
 import Axios from 'axios';
-import {baseURL} from '../../../../config';
+import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { baseURL } from '../../../../config';
 import Legend from './Legend';
-// const data = require('../../../../db/sub-testing/2017-04-24-14-40-cleaned');
 require('../../../../styles/Radar.css');
 
 class RadarChart extends Component {
@@ -17,12 +18,7 @@ class RadarChart extends Component {
   }
 
   componentDidMount(){
-    const srString = this.props.subreddits.join(',');
-    // Axios.get(baseURL + 'api/auth/radar', {
-    //   params: {
-    //     subreddits: srString}
-    //   })
-    Axios.post(baseURL + 'api/auth/radar', {subreddits: this.props.subreddits})
+    Axios.post(baseURL + 'api/auth/radar', {subreddits: this.props.selectedSubreddits})
       .then(r => {
         this.setState({data: r.data, currentData: r.data[0]});
       })
@@ -89,4 +85,10 @@ class RadarChart extends Component {
   }
 }
 
-export default RadarChart;
+const mapStateToProps = (state) => {
+  return {
+    selectedSubreddits: state.user.selectedSubreddits
+  };
+};
+
+export default withRouter(connect(mapStateToProps)(RadarChart));

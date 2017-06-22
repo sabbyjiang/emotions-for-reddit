@@ -1,43 +1,25 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Axios from 'axios';
-import {baseURL} from '../../../config';
+import { setSubreddits, setPosts, addSelectedSR, removeSelectedSR } from '../../actions/userActions';
+// import {baseURL} from '../../../config';
 require('../../../styles/Landing.css');
 
 class Landing extends Component {
   constructor(){
     super();
     this.state = {
-      subreddits: [],
-      posts: [],
       selectedSubreddits: [],
     }
   }
 
   componentDidMount(){
-    Axios.get(baseURL + 'api/auth/get-subscriptions')
-      .then(response => {
-        if(response.data.error){
-          alert(response.data.error);
-          if(response.data.error === "Not logged in yet!"){
-            this.props.history.push('/');
-          }
-        } else {
-          const data = response.data;
-          this.setState({subreddits: data});
-        }
-      })
-  }
-
-  getSubredditPosts(subreddit){
-    Axios.get(baseURL + 'api/auth/get-subreddit-posts?subreddit=' + subreddit)
-      .then(r => {
-        this.setState({posts: r.data})
-      })
+    this.props.setSubreddits();
   }
 
   createPostList(){
-    return this.state.posts.map((post, index) => {
+    return this.props.posts.map((post, index) => {
       return (
         <div className="post" key={post.permalink}>
           <h5><a href={`${post.url}`}>{post.title}</a></h5>
@@ -52,15 +34,18 @@ class Landing extends Component {
 
   createToneButton(){
     return (
-      <Link to={`/chart/${this.state.posts[0].subreddit}`}>
-        <h2> {`Get Tone Analysis For ${this.state.posts[0].subreddit_name_prefixed}`} </h2>
+      <Link to={`/chart/${this.props.posts[0].subreddit}`}>
+        <h2> {`Get Tone Analysis For ${this.props.posts[0].subreddit_name_prefixed}`} </h2>
       </Link>
     )
   }
 
   checkBox(e){
-    if(this.props.selected.length < 5 || e.target.checked === false){
-      this.props.selectSR(e.target.value)
+    // e.target.checked checks the status of the event POST click so it's not that if the checkbox was unchecked before the event but rather what the state is post event
+    if(this.props.selectedSubreddits.length < 5 && e.target.checked === true){
+      this.props.addSR(e.target.value)
+    } else if (e.target.checked === false) {
+      this.props.removeSR(e.target.value);
     } else {
       alert("You can only select up to 5!");
       e.target.checked = false;
@@ -68,10 +53,10 @@ class Landing extends Component {
   }
   
   createSubredditList(){
-    return this.state.subreddits.map((sr, index) => {
+    return this.props.subreddits.map((sr, index) => {
       return (
         <label  key={sr.display_name + index} 
-                onClick={() => this.getSubredditPosts(sr.display_name) }> 
+                onClick={() => this.props.setPosts(sr.display_name) }> 
           <input  type="checkbox" 
                   value={sr.display_name}
                   onChange={(e) => this.checkBox(e)}>
@@ -83,7 +68,7 @@ class Landing extends Component {
   }
 
   render(){
-    if(!this.state.subreddits.length){
+    if(!this.props.subreddits.length){
       return(
         <div className="center window">
           <div className="alert">
@@ -104,9 +89,9 @@ class Landing extends Component {
             </form>
           </div>
           <div className="posts-container">
-            {this.state.posts.length ? this.createToneButton() : null}
+            {this.props.posts.length ? this.createToneButton() : null}
             <div className="posts">
-              {this.state.posts.length ? this.createPostList() : null }
+              {this.props.posts.length ? this.createPostList() : null }
             </div>
           </div>
         </div>
@@ -115,4 +100,29 @@ class Landing extends Component {
   }
 }
 
-export default Landing;
+const mapStateToProps = (state) => {
+  return {
+    subreddits: state.user.subreddits,
+    posts: state.user.posts,
+    selectedSubreddits: state.user.selectedSubreddits
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setSubreddits: () => {
+      dispatch(setSubreddits());
+    }, 
+    setPosts: (subreddit) => {
+      dispatch(setPosts(subreddit));
+    }, 
+    addSR: (subreddit) => {
+      dispatch(addSelectedSR(subreddit));
+    },
+    removeSR: (subreddit) => {
+      dispatch(removeSelectedSR(subreddit));
+    }
+  };
+};
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Landing));

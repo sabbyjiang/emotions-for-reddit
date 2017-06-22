@@ -10,17 +10,17 @@ import Authorised from './components/Authorised';
 import EmotionsGraph from './components/EmotionsGraph';
 import Header from './components/Header';
 import RadarChart from './components/Authorised/Radar';
-import Test from './testRedux';
+// import Test from './testRedux';
 
 export default (
   <Provider store={ store } >
     <BrowserRouter> 
       <div className="body">
         <Header />
-        <Route exact path="/" component={App} />
-        <Route path="/home" component={Authorised} />
-        <Route path="/chart/:subredditName" component={EmotionsGraph} />
-        <Route path="/test" component={ Test } />
+        <Route exact path="/" component={ App } />
+        <Route path="/home" component={ Authorised } />
+        <Route path="/chart/:subredditName" component={ EmotionsGraph } />
+        {/*<Route path="/test" component={ Test } />*/}
       </div>
     </BrowserRouter>
   </Provider>

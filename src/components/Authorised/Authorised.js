@@ -42,10 +42,8 @@ class Authorised extends Component {
                     submitSR={this.submitSR.bind(this)}
                     {...this.props}/>
         );
-        break;
       case "Radar":
         return < Radar subreddits={this.state.selectedSubreddits} {...this.props}/>;
-        break;
     }
   }
 
