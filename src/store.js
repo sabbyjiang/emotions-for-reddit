@@ -10,7 +10,9 @@ const store = createStore(
   })
   ,
   {},
-  applyMiddleware(logger, thunk)
+  applyMiddleware(
+    // logger, 
+    thunk)
 );
 
 export default store;
