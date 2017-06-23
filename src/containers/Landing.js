@@ -5,6 +5,7 @@ import Axios from 'axios';
 import { setSubreddits, setPosts, addSelectedSR, removeSelectedSR, clearSelectedSR } from '../actions/userActions';
 // import {baseURL} from '../../../config';
 require('../../styles/Landing.css');
+import ReactTooltip from 'react-tooltip';
 
 class Landing extends Component {
   constructor(){
