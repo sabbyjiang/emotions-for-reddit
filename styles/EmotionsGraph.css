@@ -1,20 +1,19 @@
-.post-title {
-  width: 40vw;
-  min-width: 400px;
-}
-
 .graph-page {
   margin: 90px 0 0 0;
   justify-content: space-between;
 }
 
-.graph-titles {
-  width: 100%;
+.graph-details-container {
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  height: 35px;
-  padding: 0 50px
+  margin: 0 auto;
+  width: 870px;
+  justify-content: space-around;
+}
+
+.graph-titles {
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column wrap;
 }
 
 .graph {
@@ -25,8 +24,22 @@
 
 .graph-options-container {
   display: flex;
-  width: 30vw;
-  min-width: 400px;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: space-around;
   padding: 0 50px;
+  width: 50%;
+}
+
+.tone-stats {
+  display: flex;
+  flex-direction: column;
+}
+
+.emph {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.sr-title {
+  font-size: 12pt;
 }
