@@ -5,7 +5,7 @@ const userReducer = (state = {
     subreddits: [],
     posts: [],
     selectedSubreddits: [],
-    name: "MAX"
+    user: {}
 }, action) => {
     switch (action.type) {
         case "SET_USER_SUBREDDITS": 
@@ -39,6 +39,12 @@ const userReducer = (state = {
             state = {
                 ...state,
                 selectedSubreddits: action.payload
+            }
+            break;
+        case "SET_USER":
+            state = {
+                ...state,
+                user: action.payload
             }
             break;
         default: 

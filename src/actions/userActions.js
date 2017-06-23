@@ -25,11 +25,22 @@ export function setPosts(subreddit){
   return dispatch => {
     Axios.get(baseURL + 'api/auth/get-subreddit-posts?subreddit=' + subreddit)
       .then(response => {
-        console.log(response);
         dispatch({
           type: "SET_POSTS",
           payload: response.data
         })
+      });
+  };
+};
+
+export function setUser(){
+  return dispatch => {
+    Axios.get(baseURL + 'api/auth/user')
+      .then(response => {
+        dispatch({
+          type: "SET_USER",
+          payload: response.data
+        });
       });
   };
 };

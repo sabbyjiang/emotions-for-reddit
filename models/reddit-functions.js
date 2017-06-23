@@ -191,4 +191,16 @@ const getAuth = (req, res, next) => {
     .catch(err => {console.log("err", err)});
 }
 
-module.exports = {redditHot, redditTop, getAuth, getSnoowrap, getSubscriptions, getSubredditPosts, cleanRedditData, getMassSubredditPosts, getHotForRadar};
+const getUser = (req, res, next) => {
+  req.r.getMe()
+    .then(results => {
+      req.userName = results;
+      next();
+    })
+    .catch(err => {
+      req.error = "Unable to get username";
+      next();
+    })
+}
+
+module.exports = {redditHot, redditTop, getAuth, getSnoowrap, getSubscriptions, getSubredditPosts, cleanRedditData, getMassSubredditPosts, getHotForRadar, getUser};

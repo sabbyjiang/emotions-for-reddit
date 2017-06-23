@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import { setSubreddits, setPosts, addSelectedSR, removeSelectedSR, clearSelectedSR } from '../actions/userActions';
+import { setSubreddits, setPosts, addSelectedSR, removeSelectedSR, clearSelectedSR, setUser } from '../actions/userActions';
 // import {baseURL} from '../../../config';
 require('../../styles/Landing.css');
-import ReactTooltip from 'react-tooltip';
 
 class Landing extends Component {
   constructor(){
@@ -16,6 +15,7 @@ class Landing extends Component {
     if(this.props.subreddits.length !== 0){
       this.props.clearSelectedSR();
     } else {
+      this.props.setUser();
       this.props.setSubreddits();
     }
   }
@@ -131,6 +131,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     clearSelectedSR: () => {
       dispatch(clearSelectedSR());
+    },
+    setUser: () => {
+      dispatch(setUser());
     }
   };
 };

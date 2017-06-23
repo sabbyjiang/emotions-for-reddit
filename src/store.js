@@ -11,7 +11,7 @@ const store = createStore(
   ,
   {},
   applyMiddleware(
-    // logger, 
+    logger, 
     thunk)
 );
 
