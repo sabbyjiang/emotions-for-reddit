@@ -47,6 +47,14 @@ const userReducer = (state = {
                 user: action.payload
             }
             break;
+        case "CLEAR_USER":
+            state = {
+                subreddits: [],
+                posts: [],
+                selectedSubreddits: [],
+                user: {}
+            }
+            break;
         default: 
             return state;
     }

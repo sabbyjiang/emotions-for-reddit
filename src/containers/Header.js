@@ -11,6 +11,14 @@ class Header extends Component {
     super();
   }
 
+  logOut(e){
+    e.preventDefault();
+    console.log(e);
+
+    this.props.logOut();
+    window.location.replace(baseURL + 'api/auth/logout');
+  }
+
   render(){
     return (
       <header>
@@ -24,10 +32,11 @@ class Header extends Component {
           <ul>
             <h5>Nav:</h5>
             <li><Link to="/home">Home</Link></li>
-            {'name' in this.props.user ? <li><a href="/api/auth/logout">Log Out </a></li> :
+            {this.props.user.name !== undefined ? 
+              <li><a onClick={(e) => this.logOut(e)} href="/api/auth/logout">Log Out </a></li> :
               <li><a href={`https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=${baseURL}api/auth/&duration=permanent&scope=identity,history,mysubreddits,read`}>Login</a></li>
             }
-            {'name' in this.props.user ? 
+            {this.props.user.name !== undefined ? 
               <li>
                 <a 
                   href={`https://www.reddit.com/u/${this.props.user.name}`}
@@ -61,4 +70,15 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Header)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logOut: () => {
+      dispatch({
+        type: "CLEAR_USER",
+        payload: ""
+      })
+    }
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));
