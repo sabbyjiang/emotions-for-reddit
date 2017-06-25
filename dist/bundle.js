@@ -75240,7 +75240,7 @@ var Header = function (_Component) {
                 'Home'
               )
             ),
-            this.props.user.name ? _react2.default.createElement(
+            'name' in this.props.user ? _react2.default.createElement(
               'li',
               null,
               _react2.default.createElement(
@@ -75257,14 +75257,16 @@ var Header = function (_Component) {
                 'Login'
               )
             ),
-            this.props.user.name ? _react2.default.createElement(
+            'name' in this.props.user ? _react2.default.createElement(
               'li',
               null,
               _react2.default.createElement(
                 'a',
                 {
                   href: 'https://www.reddit.com/u/' + this.props.user.name,
-                  'data-tip': true, 'data-for': "user-info" },
+                  'data-tip': true,
+                  'data-for': "user-info"
+                },
                 this.props.user.name
               )
             ) : ""
@@ -75272,11 +75274,11 @@ var Header = function (_Component) {
         ),
         _react2.default.createElement(
           _reactTooltip2.default,
-          { type: 'info', id: "user-info", place: 'bottom' },
+          { type: 'info', id: "user-info" },
           _react2.default.createElement(
             'span',
             null,
-            'Karma'
+            'Your Karma'
           ),
           _react2.default.createElement(
             'div',
@@ -75284,12 +75286,12 @@ var Header = function (_Component) {
             _react2.default.createElement(
               'span',
               { className: 'user-info' },
-              this.props.user.name ? 'Comment:' + this.props.user.comment_karma : ""
+              'comment_karma' in this.props.user ? 'Comment: ' + this.props.user.comment_karma + ' ' : ""
             ),
             _react2.default.createElement(
               'span',
               { className: 'user-info' },
-              this.props.user.name ? 'Link:' + this.props.user.link_karma : ""
+              'link_karma' in this.props.user ? 'Link: ' + this.props.user.link_karma : ""
             )
           )
         )
@@ -75301,12 +75303,20 @@ var Header = function (_Component) {
 }(_react.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
+  var _state$user$user = state.user.user,
+      name = _state$user$user.name,
+      comment_karma = _state$user$user.comment_karma,
+      link_karma = _state$user$user.link_karma;
+
   return {
-    user: state.user.user
+    user: { name: name, comment_karma: comment_karma, link_karma: link_karma }
   };
 };
 
-exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps)(Header));
+exports.default =
+// withRouter(
+(0, _reactRedux.connect)(mapStateToProps)(Header);
+// );
 
 /***/ }),
 /* 541 */

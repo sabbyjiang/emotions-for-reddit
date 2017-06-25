@@ -24,26 +24,29 @@ class Header extends Component {
           <ul>
             <h5>Nav:</h5>
             <li><Link to="/home">Home</Link></li>
-            {this.props.user.name ? <li><a href="/api/auth/logout">Log Out </a></li> :
+            {'name' in this.props.user ? <li><a href="/api/auth/logout">Log Out </a></li> :
               <li><a href={`https://www.reddit.com/api/v1/authorize?client_id=1DGdeO4omeN3ug&response_type=code&state=authorization-pass&redirect_uri=${baseURL}api/auth/&duration=permanent&scope=identity,history,mysubreddits,read`}>Login</a></li>
             }
-            {this.props.user.name ? 
+            {'name' in this.props.user ? 
               <li>
                 <a 
                   href={`https://www.reddit.com/u/${this.props.user.name}`}
-                  data-tip data-for={"user-info"} >
+                  data-tip 
+                  data-for={"user-info"}
+                   >
                     {this.props.user.name}
                 </a>
               </li> : "" }
           </ul>
         </nav>
-        <ReactTooltip type="info" id={"user-info"} place="bottom">
-          <span>Karma</span>
+        <ReactTooltip type="info" id={"user-info"}>
+          <span>Your Karma</span>
           <div>
             <span className="user-info">
-            {this.props.user.name ? `Comment:${this.props.user.comment_karma}` : ""}</span>
+            {'comment_karma' in this.props.user ? `Comment: ${this.props.user.comment_karma} ` : ""}
+            </span>
             <span className="user-info">
-            {this.props.user.name ? `Link:${this.props.user.link_karma}` : ""}</span>
+            {'link_karma' in this.props.user ? `Link: ${this.props.user.link_karma}` : ""}</span>
           </div>
         </ReactTooltip>
       </header>
@@ -52,9 +55,13 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const {name, comment_karma, link_karma} = state.user.user;
   return {
-    user: state.user.user
+    user: {name, comment_karma, link_karma}
   };
 };
 
-export default withRouter(connect(mapStateToProps)(Header));
+export default 
+  // withRouter(
+    connect(mapStateToProps)(Header)
+    // );
