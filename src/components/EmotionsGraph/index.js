@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-// import data from '../../../build/data/2017-04-19-18-11';
 import axios from 'axios';
 import StackedBar from './StackedBar';
 require('../../../styles/EmotionsGraph.css');
