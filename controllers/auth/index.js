@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {getAuth, refreshToken, getSnoowrap, getSubscriptions, getSubredditPosts, cleanRedditData, getMassSubredditPosts, getHotForRadar} = require('../../models/reddit-functions');
+const {getAuth, refreshToken, getSnoowrap, getSubscriptions, getSubredditPosts, cleanRedditData, getMassSubredditPosts, getHotForRadar, getUser} = require('../../models/reddit-functions');
 const {getTone, getToneIndSub, getToneMassSub} = require('../../models/watson-functions');
 const {cleanData, cleanForRadar, cleanSRArrayForWatson} = require('../../models/gen-functions');
 
@@ -45,6 +45,16 @@ router.get('/analysis', getSnoowrap, getSubredditPosts, cleanRedditData, getTone
     res.json(results);
   }
 });
+
+router.get('/user', getSnoowrap, getUser, (req, res) => {
+  if(req.error){
+    const error = req.error;
+    res.json({error});
+  } else {
+    const user = req.userName;
+    res.json(user);
+  }
+})
 
 router.get('/logout', (req, res) => {
   res.clearCookie('access');
