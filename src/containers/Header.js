@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-// import { setUser } from '../actions/userActions';
-require('../../styles/Header.css');
+// require('../../styles/Header.css');
+require('../../styles/Header.scss');
 import {baseURL} from '../../config/';
 import ReactTooltip from 'react-tooltip';
 

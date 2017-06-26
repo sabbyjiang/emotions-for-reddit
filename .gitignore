@@ -46,3 +46,5 @@ CNAME
 node_modules
 
 public
+
+dist

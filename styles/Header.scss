@@ -1,0 +1,39 @@
+@import 'colors';
+@import 'dimensions';
+
+header {
+  position: relative;
+  box-shadow: 0 5px 50px 0px $theme-color;
+  background: $theme-color;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 5;
+  height: $header-height;
+  h1 {
+    color: $counter-color;
+    margin: 0;
+  }
+}
+
+nav {
+  display: flex;
+  min-width: 300px;
+  width: 300px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+
+  h5 {color: $counter-color}
+  
+  ul {
+    display: flex;
+    justify-content: space-around;
+    li {
+      padding: 0 10px;
+      a {
+        color: $counter-color;
+      }
+    }
+  }
+}

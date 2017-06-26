@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReduxRouter from './ReduxRouter';
-require('../styles/Index.css');
+// require('../styles/Index.css');
+require('../styles/Index.scss');
 
 
 String.prototype.capitalize = function() {

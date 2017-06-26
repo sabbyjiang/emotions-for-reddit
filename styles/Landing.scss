@@ -1,0 +1,41 @@
+@import 'colors';
+@import 'dimensions';
+
+.alert {
+  box-shadow: 0px 0px 30px 5px darken($theme-color, 10%);
+  background-color: $counter-color;
+  padding: 20px 40px;
+  border-radius: 8px;
+  h2 {
+    color: $off-theme-color;
+  }
+}
+
+.center {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}
+
+.window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: transparentize(brighten($theme-color, 60%), 0.7);
+}
+
+.landing {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
+.subreddits {
+  display: flex;
+  flex-direction: column;
+}
