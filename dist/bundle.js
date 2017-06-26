@@ -3831,8 +3831,8 @@ module.exports = __webpack_require__(360);
 "use strict";
 
 
-var baseURL = "https://reddit-emotions.herokuapp.com/";
-// const baseURL = "http://localhost:8080/";
+// const baseURL = "https://reddit-emotions.herokuapp.com/";
+var baseURL = "http://localhost:8080/";
 
 module.exports = { baseURL: baseURL };
 
@@ -66627,8 +66627,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // import {baseURL} from '../../../config';
-__webpack_require__(400);
-// require('../../styles/Landing.scss');
+// require('../../styles/Landing.css');
+__webpack_require__(545);
 
 var Landing = function (_Component) {
   _inherits(Landing, _Component);
@@ -66931,12 +66931,7 @@ function clearSelectedSR() {
 }
 
 /***/ }),
-/* 400 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 400 */,
 /* 401 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -75357,6 +75352,12 @@ exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapSt
 /***/ }),
 /* 543 */,
 /* 544 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 545 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

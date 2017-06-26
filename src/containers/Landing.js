@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import Axios from 'axios';
 import { setSubreddits, setPosts, addSelectedSR, removeSelectedSR, clearSelectedSR, setUser } from '../actions/userActions';
 // import {baseURL} from '../../../config';
-require('../../styles/Landing.css');
-// require('../../styles/Landing.scss');
+// require('../../styles/Landing.css');
+require('../../styles/Landing.scss');
 
 class Landing extends Component {
   constructor(){
@@ -89,7 +89,7 @@ class Landing extends Component {
         <div className="App landing">
           <div className="subreddits">
             <h2> Click on a Subreddit to See The Current Posts </h2>
-            <form className="subreddit-form" onSubmit={(e) => this.goToRadar(e)}>
+          <form className="subreddit-form" onSubmit={(e) => this.goToRadar(e)}>
               <label className="absolute-top">
                 <input type="submit" value="Get Tones For Subreddits" />
               </label>

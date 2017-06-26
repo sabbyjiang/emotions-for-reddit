@@ -26,16 +26,91 @@
   right: 0;
   bottom: 0;
   z-index: 10;
-  background-color: transparentize(brighten($theme-color, 60%), 0.7);
+  background-color: brighten(transparentize($theme-color, 0.7), 60%);
 }
 
 .landing {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  margin-top: $header-height / 4;
 }
 
 .subreddits {
   display: flex;
   flex-direction: column;
+  width: 30%;
+  min-width: 400px;
+  padding: 0px 50px;
+  h2 {
+    padding-bottom: 10px;
+  }
+}
+
+.subreddit-form {
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  height: 75vh;
+
+  label {
+    display: flex;
+    margin: 10px 0 10px 0;
+    align-items: center;
+    width: 180px;
+
+    input {
+      display: flex;
+      justify-content: space-around;
+      width: 200px;
+      flex-direction: column-reverse;
+    }
+  }
+}
+
+.absolute-top {
+  min-width: 150px;
+  align-self: flex-end;
+  position: absolute;
+  width: 17vw;
+}
+
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  width: 40vw;
+  min-width: 300px;
+}
+
+.posts {
+  overflow: scroll;
+  height: 75vh;
+}
+
+.post {
+  margin: 10px 0;
+  
+  ul {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+ul li {
+  display: inline-block;
+}
+
+a {
+  color: $off-theme-color;
+  
+  &:hover {
+    color: lighten($theme-color, 30%);
+
+  }
+
+  h2 {
+    color: darken($theme-color, 40%);
+    padding: 20px 0 10px 0;
+  }
 }
