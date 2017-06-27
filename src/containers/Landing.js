@@ -3,8 +3,6 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Axios from 'axios';
 import { setSubreddits, setPosts, addSelectedSR, removeSelectedSR, clearSelectedSR, setUser } from '../actions/userActions';
-// import {baseURL} from '../../../config';
-// require('../../styles/Landing.css');
 require('../../styles/Landing.scss');
 
 class Landing extends Component {

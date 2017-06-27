@@ -6,7 +6,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { baseURL } from '../../../config';
 import Legend from './Legend';
-require('../../../styles/Radar.css');
+require('../../../styles/Radar.scss');
 
 class RadarChart extends Component {
   constructor(){

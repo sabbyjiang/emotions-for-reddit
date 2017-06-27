@@ -1,0 +1,45 @@
+.graph-page {
+  margin-top: 90px;
+  justify-content: space-between;
+}
+
+.graph-details-container {
+  display: flex;
+  margin: 0 auto;
+  width: 870px;
+  justify-content: space-around;
+}
+
+.graph-titles {
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column wrap;
+}
+
+.graph {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.graph-options-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 0 50px;
+  width: 50%;
+}
+
+.tone-stats {
+  display: flex;
+  flex-direction: column;
+}
+
+.emph {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.sr-title {
+  font-size: 12pt;
+}

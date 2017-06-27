@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
 import StackedBar from './StackedBar';
-require('../../../styles/EmotionsGraph.css');
+// require('../../../styles/EmotionsGraph.css');
+require('../../../styles/EmotionsGraph.scss');
 import Sorting from './Sorting';
 import { baseURL } from '../../../config';
 import ReactTooltip from 'react-tooltip'

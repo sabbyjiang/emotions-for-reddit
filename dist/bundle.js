@@ -66531,7 +66531,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(397);
+// require('../../styles/App.css');
+__webpack_require__(544);
 
 var App = function (_Component) {
   _inherits(App, _Component);
@@ -66586,12 +66587,7 @@ var App = function (_Component) {
 exports.default = App;
 
 /***/ }),
-/* 397 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 397 */,
 /* 398 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -66626,9 +66622,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// import {baseURL} from '../../../config';
-// require('../../styles/Landing.css');
-__webpack_require__(545);
+__webpack_require__(400);
 
 var Landing = function (_Component) {
   _inherits(Landing, _Component);
@@ -66931,7 +66925,12 @@ function clearSelectedSR() {
 }
 
 /***/ }),
-/* 400 */,
+/* 400 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
 /* 401 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -66999,7 +66998,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(515);
+__webpack_require__(546);
 
 var RadarChart = function (_Component) {
   _inherits(RadarChart, _Component);
@@ -73253,12 +73252,7 @@ var Keys = function Keys(props) {
 exports.default = Keys;
 
 /***/ }),
-/* 515 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 515 */,
 /* 516 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -73309,7 +73303,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-__webpack_require__(539);
+// require('../../../styles/EmotionsGraph.css');
+__webpack_require__(545);
 
 var EmotionsGraph = function (_Component) {
   _inherits(EmotionsGraph, _Component);
@@ -75133,12 +75128,7 @@ var Sorting = function (_Component) {
 exports.default = Sorting;
 
 /***/ }),
-/* 539 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 539 */,
 /* 540 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -75174,7 +75164,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // require('../../styles/Header.css');
-__webpack_require__(544);
+__webpack_require__(541);
 
 var Header = function (_Component) {
   _inherits(Header, _Component);
@@ -75343,7 +75333,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Header));
 
 /***/ }),
-/* 541 */,
+/* 541 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
 /* 542 */
 /***/ (function(module, exports) {
 
@@ -75358,6 +75353,12 @@ exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapSt
 
 /***/ }),
 /* 545 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 546 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

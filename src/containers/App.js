@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-require('../../styles/App.css');
+// require('../../styles/App.css');
+require('../../styles/App.scss');
 import { baseURL } from '../../config/';
 import { connect } from 'react-redux';
 
